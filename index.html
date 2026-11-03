@@ -1,0 +1,736 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>MÉNAGE_OS · Chapitre 3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+:root{--mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;--bg:#070b14;--bg2:#0d1424;--glass:rgba(255,255,255,.05);--edge:rgba(140,200,255,.16);--ink:#eaf2ff;--mute:#8797b3;--cyan:#38e1d6;--violet:#9b7bff;--pink:#ff5fa2;--amber:#ffb547;--green:#4be08a;--red:#ff5d6c}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--ink);font:16px/1.5 "Space Grotesk",system-ui,sans-serif;overflow-x:hidden;
+ background-image:radial-gradient(1200px 600px at 80% -10%,rgba(155,123,255,.18),transparent 60%),radial-gradient(900px 500px at -10% 110%,rgba(56,225,214,.14),transparent 60%),linear-gradient(rgba(140,200,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(140,200,255,.045) 1px,transparent 1px);
+ background-size:auto,auto,44px 44px,44px 44px;background-attachment:fixed}
+.mono{font-family:var(--mono)}
+button{font:inherit;color:inherit;cursor:pointer}
+#app{min-height:100%;padding:max(16px,env(safe-area-inset-top)) 16px 24px}
+.wrap{max-width:1100px;margin:0 auto}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px;padding-right:120px}
+.logo{font-family:var(--mono);font-weight:600;letter-spacing:.12em;font-size:14px;color:var(--cyan)}
+.logo span{color:var(--mute)}
+.pill{font-family:var(--mono);font-size:12px;border:1px solid var(--edge);padding:5px 10px;border-radius:30px;color:var(--mute)}
+.glass{background:var(--glass);border:1px solid var(--edge);border-radius:20px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.pad{padding:22px}
+h1,h2,h3{margin:0;line-height:1.1;font-weight:700}
+.big{font-size:clamp(34px,6vw,64px);letter-spacing:-.02em}
+.grad{background:linear-gradient(90deg,var(--cyan),var(--violet) 60%,var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:var(--mute)}
+.btn{border:1px solid var(--edge);background:rgba(255,255,255,.06);padding:14px 20px;border-radius:14px;font-weight:600;font-size:17px;transition:transform .15s,background .2s}
+.btn:active{transform:scale(.97)}
+.btn.go{background:linear-gradient(90deg,var(--cyan),var(--violet));color:#05101a;border:0}
+.btn.ghost{background:transparent}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+input.field{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--edge);border-radius:14px;padding:16px;color:var(--ink);font:600 22px var(--mono);letter-spacing:.08em;text-align:center;outline:none}
+input.field:focus{border-color:var(--cyan)}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.grid{display:grid;gap:14px}
+.center{display:grid;place-items:center;min-height:70vh;text-align:center}
+.fade{animation:fade .45s ease both}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.pop{animation:pop .6s cubic-bezier(.2,1.6,.4,1) both}
+@keyframes pop{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
+.scan{position:relative;overflow:hidden}
+.scan::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent,rgba(56,225,214,.12),transparent);height:40%;animation:scan 3s linear infinite;pointer-events:none}
+@keyframes scan{from{transform:translateY(-100%)}to{transform:translateY(260%)}}
+/* landing */
+.choice{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;max-width:760px;width:100%}
+.choice button{text-align:left;padding:26px}
+.choice b{display:block;font-size:22px;margin-bottom:6px}
+/* profile card */
+.idcard{max-width:520px;width:100%;text-align:left;padding:24px;position:relative;overflow:hidden}
+.idcard .av{font-size:64px;line-height:1}
+.idcard .kv{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.kv div{background:rgba(255,255,255,.04);border-radius:12px;padding:10px 12px}
+.kv small{display:block;color:var(--mute);font-size:12px;font-family:var(--mono)}
+.kv b{font-size:20px}
+/* bank app */
+.bank{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:16px}
+@media (max-width:820px){.bank{grid-template-columns:1fr}}
+.balance{font-family:var(--mono);font-size:44px;font-weight:600;letter-spacing:-.02em}
+.notif{display:flex;gap:12px;align-items:center;padding:12px 14px;border-radius:16px;background:rgba(56,225,214,.12);border:1px solid rgba(56,225,214,.35);margin-bottom:12px}
+.notif .ic{font-size:26px}
+.event{padding:14px 16px;border-radius:16px;margin-bottom:14px;border:1px solid}
+.ev-info{background:rgba(155,123,255,.12);border-color:rgba(155,123,255,.4)}
+.ev-good{background:rgba(75,224,138,.1);border-color:rgba(75,224,138,.4)}
+.ev-warn{background:rgba(255,181,71,.1);border-color:rgba(255,181,71,.45)}
+.ev-bad{background:rgba(255,93,108,.1);border-color:rgba(255,93,108,.45)}
+.event b{display:block;font-size:17px;margin-bottom:2px}
+.tx{display:flex;justify-content:space-between;padding:9px 2px;border-bottom:1px dashed rgba(140,200,255,.12);font-size:15px;opacity:0;transform:translateX(-8px);transition:all .35s}
+.tx.on{opacity:1;transform:none}
+.tx .a{font-family:var(--mono);color:var(--red)}
+.tx .a.pos{color:var(--green)}
+.sect{font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:var(--mute);text-transform:uppercase;margin:16px 0 8px}
+.shop{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.item{position:relative;text-align:left;padding:14px;border-radius:16px;border:1px solid var(--edge);background:rgba(255,255,255,.035);min-height:112px;transition:all .18s}
+.item .e{font-size:28px;line-height:1}
+.item .n{font-weight:600;margin:6px 0 2px;font-size:15px}
+.item .p{font-family:var(--mono);color:var(--mute);font-size:14px}
+.item .c{position:absolute;top:10px;right:10px;font-size:10px;font-family:var(--mono);color:var(--mute);letter-spacing:.06em}
+.item.on{border-color:var(--cyan);background:rgba(56,225,214,.12);box-shadow:0 0 0 1px var(--cyan),0 0 24px rgba(56,225,214,.18)}
+.item.on .p{color:var(--cyan)}
+.item .up{color:var(--red);font-size:12px;margin-left:4px}
+.dock{position:sticky;bottom:10px;margin-top:16px;display:grid;grid-template-columns:1fr 1fr auto;gap:10px;align-items:center;padding:12px 14px}
+.dock small{display:block;color:var(--mute);font-size:12px;font-family:var(--mono)}
+.dock b{font-family:var(--mono);font-size:22px}
+.neg{color:var(--red)}
+.vault{display:flex;align-items:center;gap:8px}
+/* teacher */
+.tgrid{display:grid;grid-template-columns:320px 1fr;gap:18px}
+@media (max-width:900px){.tgrid{grid-template-columns:1fr}}
+#qr{background:#fff;padding:12px;border-radius:14px;display:inline-block}
+.code{font-family:var(--mono);font-size:56px;font-weight:600;letter-spacing:.2em;color:var(--cyan)}
+.players{display:flex;flex-wrap:wrap;gap:8px}
+.chipp{padding:7px 12px;border-radius:30px;border:1px solid var(--edge);background:rgba(255,255,255,.04);font-size:14px}
+.chipp.done{border-color:var(--green);background:rgba(75,224,138,.12)}
+.chipp.bot{opacity:.6}
+.meter{height:14px;border-radius:10px;background:rgba(255,255,255,.07);overflow:hidden;display:flex}
+.meter i{display:block;height:100%;transition:width .8s cubic-bezier(.2,.8,.2,1)}
+.splitbar{height:70px;border-radius:16px;overflow:hidden;display:flex;font-family:var(--mono);font-weight:600;font-size:20px}
+.splitbar div{display:flex;align-items:center;justify-content:center;transition:flex-basis 1.2s cubic-bezier(.2,.8,.2,1);white-space:nowrap;overflow:hidden}
+.reveal{min-height:70vh;display:grid;align-content:center;gap:22px;text-align:center}
+.hero-num{font-family:var(--mono);font-size:clamp(70px,13vw,150px);font-weight:600;line-height:1}
+.stamp{display:inline-block;margin:0 auto;padding:12px 22px;border:2px solid var(--cyan);border-radius:14px;color:var(--cyan);font-family:var(--mono);font-size:clamp(16px,2.2vw,22px);letter-spacing:.06em;animation:stamp .7s .9s cubic-bezier(.2,1.6,.4,1) both;background:rgba(56,225,214,.06)}
+@keyframes stamp{from{opacity:0;transform:scale(1.8) rotate(-4deg)}to{opacity:1;transform:rotate(-2deg)}}
+.formula{font-family:var(--mono);font-size:clamp(18px,2.4vw,26px);color:var(--violet)}
+.hbars{display:grid;gap:10px;max-width:820px;margin:0 auto;width:100%;text-align:left}
+.hb{display:grid;grid-template-columns:200px 1fr 80px;gap:12px;align-items:center}
+.hb .t{height:26px;border-radius:8px;background:rgba(255,255,255,.06);overflow:hidden}
+.hb .t i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--violet));border-radius:8px;transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
+.hb .v{font-family:var(--mono);font-weight:600}
+@media (max-width:600px){.hb{grid-template-columns:110px 1fr 60px;font-size:13px}}
+.steps{display:flex;gap:6px;justify-content:center}
+.steps i{width:28px;height:4px;border-radius:4px;background:rgba(255,255,255,.15)}
+.steps i.on{background:var(--cyan)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.kpi{padding:16px;text-align:left}
+.kpi small{color:var(--mute);font-family:var(--mono);font-size:12px}
+.kpi b{display:block;font-family:var(--mono);font-size:30px;margin-top:4px}
+/* wrapped */
+.wrapped{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:16px;padding:6px 2px 14px;scrollbar-width:none}
+.wrapped::-webkit-scrollbar{display:none}
+.wcard{flex:0 0 min(86vw,560px);scroll-snap-align:center;min-height:62vh;border-radius:26px;padding:30px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;border:1px solid var(--edge)}
+.wcard .k{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;opacity:.75}
+.wcard .bn{font-family:var(--mono);font-size:clamp(54px,11vw,92px);font-weight:600;line-height:1}
+.wcard p{font-size:19px;margin:10px 0 0}
+.wcard .note{font-size:14px;opacity:.8;border-top:1px solid rgba(255,255,255,.2);padding-top:10px}
+.w1{background:linear-gradient(150deg,#1b1250,#3b1d8f 60%,#7b2ff7)}
+.w2{background:linear-gradient(150deg,#06343a,#0c6b6b 60%,#13b3a6)}
+.w3{background:linear-gradient(150deg,#3a0d2a,#8a1d5a 60%,#ff5fa2)}
+.w4{background:linear-gradient(150deg,#3a2400,#8a5600 60%,#ffb547);color:#140b00}
+.w5{background:linear-gradient(150deg,#0b1d3a,#123f7a 60%,#3d8bff)}
+.w6{background:linear-gradient(150deg,#102614,#1d5c2c 60%,#4be08a);color:#04140a}
+.donut{width:190px;height:190px;border-radius:50%;margin:10px auto;position:relative}
+.donut::after{content:"";position:absolute;inset:30px;border-radius:50%;background:rgba(10,20,40,.85)}
+.legend{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;font-size:13px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px}
+.dots{display:flex;gap:6px;justify-content:center}
+.dots i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.25)}
+.dots i.on{background:var(--cyan)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#1a2238;border:1px solid var(--edge);padding:10px 16px;border-radius:12px;font-size:14px;z-index:20}
+.fs{position:fixed;right:14px;top:max(14px,env(safe-area-inset-top));z-index:15;border:1px solid var(--edge);background:rgba(10,16,30,.7);border-radius:10px;padding:6px 10px;font-size:13px;color:var(--mute)}
+svg text{font-family:var(--mono)}
+
+/* séances */
+.seances{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;width:100%}
+.seance{text-align:left;padding:22px;border-radius:20px;border:1px solid var(--edge);background:rgba(255,255,255,.04);display:grid;gap:6px}
+.seance .e{font-size:40px;line-height:1}
+.seance .c{font-family:var(--mono);font-size:12px;color:var(--cyan);letter-spacing:.12em}
+.seance b{font-size:21px}
+.seance:active{transform:scale(.98)}
+/* jetons */
+.jrows{display:grid;gap:8px}
+.jrow{display:grid;grid-template-columns:34px 1fr auto auto auto;gap:10px;align-items:center;padding:8px 10px;border-radius:14px;background:rgba(255,255,255,.035);border:1px solid var(--edge)}
+.jrow .e{font-size:24px}
+.jrow .bar{grid-column:2/6;height:6px;border-radius:6px;background:rgba(255,255,255,.07);overflow:hidden}
+.jrow .bar i{display:block;height:100%;transition:width .25s}
+.jb{width:46px;height:46px;border-radius:12px;border:1px solid var(--edge);background:rgba(255,255,255,.06);font-size:24px;font-weight:700;line-height:1}
+.jb:disabled{opacity:.25}
+.jv{font-family:var(--mono);font-weight:600;font-size:18px;min-width:52px;text-align:center}
+.tokens{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin:6px 0 2px}
+.tokens i{width:16px;height:16px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--violet));box-shadow:0 0 10px rgba(56,225,214,.4);transition:all .2s}
+.tokens i.used{background:rgba(255,255,255,.1);box-shadow:none}
+/* choc */
+.crow{display:grid;grid-template-columns:30px 1fr 70px 90px;gap:10px;align-items:center;padding:10px 4px;border-bottom:1px dashed rgba(140,200,255,.12)}
+.ctag{font-family:var(--mono);font-weight:600;padding:4px 8px;border-radius:8px;text-align:center;opacity:0;transform:scale(.6);transition:all .35s cubic-bezier(.2,1.6,.4,1)}
+.ctag.on{opacity:1;transform:none}
+.ctag.up{background:rgba(255,93,108,.16);color:var(--red)}
+.ctag.dn{background:rgba(75,224,138,.16);color:var(--green)}
+.ctag.eq{background:rgba(255,255,255,.08);color:var(--mute)}
+.opts{display:grid;gap:10px}
+.opt{text-align:left;padding:16px 18px;border-radius:14px;border:1px solid var(--edge);background:rgba(255,255,255,.05);font-size:17px;transition:all .2s}
+.opt b{font-family:var(--mono);color:var(--mute);margin-right:10px}
+.opt.good{border-color:var(--green);background:rgba(75,224,138,.16)}
+.opt.bad{border-color:var(--red);background:rgba(255,93,108,.14)}
+.opt:disabled{cursor:default}
+.fb{padding:14px 16px;border-radius:14px;margin-top:12px}
+.fb.ok{background:rgba(75,224,138,.12);border:1px solid rgba(75,224,138,.4)}
+.fb.ko{background:rgba(255,181,71,.1);border:1px solid rgba(255,181,71,.4)}
+/* barres à glisser */
+.dbars{display:flex;gap:12px;justify-content:center;align-items:flex-end;padding:8px 0;touch-action:none;user-select:none;-webkit-user-select:none}
+.dcol{flex:1;max-width:110px;display:grid;gap:6px;justify-items:center}
+.dval{font-weight:600;font-size:16px;min-height:22px}
+.dtrack{position:relative;width:100%;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid var(--edge);touch-action:none;cursor:ns-resize}
+.dzero{position:absolute;left:0;right:0;height:1px;background:rgba(255,255,255,.35)}
+.dfill{position:absolute;left:14%;right:14%;border-radius:6px;background:linear-gradient(180deg,var(--cyan),var(--violet))}
+.dfill.neg{background:linear-gradient(180deg,var(--pink),var(--red))}
+.dref{position:absolute;left:4%;width:16%;border-radius:4px;background:rgba(255,255,255,.22)}
+.dknob{position:absolute;left:50%;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;background:#fff;box-shadow:0 0 0 4px rgba(56,225,214,.45),0 4px 14px rgba(0,0,0,.5)}
+.dlab{font-size:13px;text-align:center;color:var(--mute);line-height:1.2}
+/* vote */
+.vcard{padding:18px;border-radius:18px;border:1px solid var(--edge);background:rgba(255,255,255,.04);display:grid;gap:12px}
+.vcard .e{font-size:34px;line-height:1}
+.vbtns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.vb{padding:14px;border-radius:14px;border:1px solid var(--edge);background:rgba(255,255,255,.05);font-weight:600}
+.vb.on{border-color:var(--cyan);background:rgba(56,225,214,.16);box-shadow:0 0 0 1px var(--cyan)}
+/* machine à remonter le temps */
+.year{font-family:var(--mono);font-size:clamp(64px,12vw,140px);font-weight:600;line-height:1;letter-spacing:.04em}
+.tm{display:grid;gap:30px;padding-top:14px;max-width:880px;margin:0 auto;width:100%;text-align:left}
+.tmr{display:grid;grid-template-columns:190px 1fr 90px;gap:12px;align-items:center}
+.tmt{position:relative;height:34px;border-radius:10px;background:rgba(255,255,255,.06)}
+.tmt i{position:absolute;left:0;top:0;bottom:0;border-radius:10px;background:linear-gradient(90deg,var(--cyan),var(--violet))}
+.tmt .gh{position:absolute;top:-6px;bottom:-6px;width:3px;background:var(--amber);border-radius:3px}
+.tmt .gh::after{content:attr(data-l);position:absolute;top:-20px;left:50%;transform:translateX(-50%);font:600 11px var(--mono);color:var(--amber);white-space:nowrap}
+.tmv{font-family:var(--mono);font-weight:600;font-size:20px}
+@media (max-width:600px){.tmr{grid-template-columns:110px 1fr 64px;font-size:13px}}
+.dotplot{position:relative;height:200px;max-width:900px;margin:0 auto;width:100%}
+.dotplot .d{position:absolute;width:16px;height:16px;margin:-8px 0 0 -8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px rgba(56,225,214,.6);animation:pop .5s both}
+.dotplot .ax{position:absolute;left:0;right:0;bottom:24px;height:1px;background:rgba(255,255,255,.3)}
+.dotplot .tk{position:absolute;bottom:0;transform:translateX(-50%);font:12px var(--mono);color:var(--mute)}
+.dotplot .mean{position:absolute;top:0;bottom:24px;width:3px;background:var(--amber);margin-left:-1px}
+.dotplot .mean span{position:absolute;top:-4px;left:8px;font:600 14px var(--mono);color:var(--amber);white-space:nowrap}
+@keyframes grow{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+.qrow{display:grid;grid-template-columns:1fr 260px 70px;gap:14px;align-items:center;text-align:left;padding:12px 0;border-bottom:1px dashed rgba(140,200,255,.14)}
+.qrow small{display:block;color:var(--green);font-family:var(--mono);font-size:13px;margin-top:4px}
+@media (max-width:700px){.qrow{grid-template-columns:1fr 90px 54px}}
+</style></head><body>
+<button class="fs" id="fsbtn">⛶ plein écran</button>
+<div id="app"><div class="wrap"></div></div>
+<script>
+/* ================= CONFIG ================= */
+const SB_URL='https://ugrzvirjnsvtlgdmfjhg.supabase.co/rest/v1/';
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVncnp2aXJqbnN2dGxnZG1mamhnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUzNDQ2NTAsImV4cCI6MjEwMDkyMDY1MH0.fOV_snoRgmQ81308Z1k3L-8-ULfRaarA_98Z5tZIlEc';
+const FRANCE_TAUX=18.3;
+
+const SEANCES={
+ s1:{code:'3.1',titre:'MÉNAGE_OS',sous:"L'arbitrage entre consommation et épargne",emoji:'🏦',tasks:4,reveals:{1:2,2:1,3:1,4:2},desc:"4 mois dans la peau d'un ménage : salaire, prime, rumeur, flambée des prix."},
+ s2:{code:'3.2',titre:'Ton inflation à toi',sous:"Le pouvoir d'achat des ménages",emoji:'🔥',tasks:3,reveals:{1:1,2:2,3:1},desc:"Chacun compose son panier, subit un choc de prix et découvre sa propre inflation."},
+ s3:{code:'3.3',titre:'Machine à remonter le temps',sous:'La structure de consommation des ménages',emoji:'⏳',tasks:2,reveals:{1:2,2:1},desc:"Prédire le budget de 2023 à partir de celui de 1960, puis démêler valeur et volume."}
+};
+const codeOf=(mode,k)=>mode==='s1'?k:mode==='s2'?20+k:30+k;
+function nextState(s){const S=SEANCES[s.mode];
+ if(s.phase==='lobby')return {...s,phase:'task',k:1,step:0};
+ if(s.phase==='task')return {...s,phase:'reveal',step:0};
+ if(s.phase==='reveal'){if(s.step<S.reveals[s.k]-1)return {...s,step:s.step+1};if(s.k<S.tasks)return {...s,phase:'task',k:s.k+1,step:0};return {...s,phase:'quiz',step:0}}
+ if(s.phase==='quiz')return {...s,phase:'quizreveal'};
+ return {...s,phase:'end'}}
+
+/* ---------- Séance 3.1 ---------- */
+const CATS={LOG:['Logement & énergie','#38e1d6'],ALI:['Alimentation','#ffb547'],TRA:['Transport','#3d8bff'],LOI:['Loisirs & culture','#ff5fa2'],HAB:['Habillement','#9b7bff'],EQU:['Équipement & télécom','#4be08a'],SAN:['Santé & assurances','#c7d2e8']};
+const PROFILES=[
+ {emoji:'🧑‍🔧',nom:'Lina',age:19,sit:'Apprentie en alternance, vit encore chez ses parents',rev:980,pat:400,m:1,pmc:.93,
+  fixed:[['Participation au foyer',100,'LOG'],['Forfait mobile',15,'EQU'],['Abonnement transport',35,'TRA'],['Assurance scooter',40,'SAN']],
+  rumeur:"Ton entreprise d'accueil ne sait pas si elle pourra te garder à la fin de ton contrat."},
+ {emoji:'🧑‍💻',nom:'Yanis',age:26,sit:'Technicien, célibataire, loue un studio',rev:1850,pat:3000,m:1,pmc:.86,
+  fixed:[['Loyer du studio',620,'LOG'],['Électricité & chauffage',55,'LOG',1],['Assurances',35,'SAN'],['Box + forfait',45,'EQU'],['Abonnement transport',45,'TRA']],
+  rumeur:'Ton entreprise annonce un plan de suppression de postes. Personne ne sait encore qui sera concerné.'},
+ {emoji:'👩‍❤️‍👨',nom:'Camille & Sami',age:32,sit:"Couple sans enfant, locataires d'un T3",rev:3900,pat:18000,m:1.8,pmc:.82,
+  fixed:[['Loyer du T3',1050,'LOG'],['Électricité & chauffage',110,'LOG',1],['Assurances',90,'SAN'],['Box + 2 forfaits',75,'EQU'],['Carburant & entretien voiture',120,'TRA']],
+  rumeur:"L'entreprise de Sami annonce des suppressions de postes. Son service pourrait être touché."},
+ {emoji:'👨‍👩‍👧‍👦',nom:'Famille Benali',age:41,sit:'Couple, deux enfants de 8 et 12 ans',rev:4300,pat:25000,m:2.8,pmc:.9,
+  fixed:[['Loyer de la maison',1180,'LOG'],['Électricité & chauffage',180,'LOG',1],['Cantine des enfants',120,'ALI',2],['Mutuelle & assurances',140,'SAN'],['Box + forfaits',90,'EQU'],['Carburant',150,'TRA']],
+  rumeur:"L'usine où travaille un des parents annonce une restructuration. Des postes vont disparaître."},
+ {emoji:'👩‍💼',nom:'Nathalie',age:52,sit:'Cadre, propriétaire de son logement, un ado à charge',rev:5600,pat:260000,m:1.6,pmc:.66,
+  fixed:[['Charges & taxe foncière',320,'LOG'],['Électricité & chauffage',160,'LOG',1],['Mutuelle & assurances',170,'SAN'],['Box + forfaits',95,'EQU'],['Carburant',130,'TRA']],
+  rumeur:"Ton groupe annonce une réorganisation : les cadres de ton service ne savent pas s'ils seront maintenus."},
+ {emoji:'👴',nom:'Gérard',age:71,sit:'Retraité, propriétaire, vit seul',rev:1950,pat:210000,m:1,pmc:.78,
+  fixed:[['Charges & taxe foncière',210,'LOG'],['Électricité & chauffage',140,'LOG',1],['Mutuelle & assurances',190,'SAN'],['Box + téléphone',55,'EQU']],
+  rumeur:"Aux infos, on parle d'un possible gel des pensions de retraite l'an prochain."}
+];
+const FOOD=[['🥫','Courses malines',170],['🛒','Courses classiques',240],['🧺','Courses plaisir',340]];
+const SHOP=[
+ ['🎬','Ciné + resto',50,'LOI',1],['🎤','Concert / festival',80,'LOI',1],['📺','Streaming + jeux',18,'LOI',0],['🏕️','Week-end',180,'LOI',1],
+ ['✈️','Acompte vacances',450,'LOI',1],['👕','Vêtements de saison',90,'HAB',1],['👟','Sneakers',130,'HAB',0],['📱','Nouveau smartphone',520,'EQU',0],
+ ['🎮','Console',380,'EQU',0],['🧰','Petit électroménager',120,'EQU',0],['🛵','Réparation scooter / vélo',70,'TRA',0],['💇','Coiffeur & soins',45,'SAN',1],['🎁',"Cadeau d'anniversaire",50,'LOI',0]
+];
+const EVENTS={
+ 1:{t:'Mois 1 · Premier salaire',cls:'ev-info',ic:'📥',txt:'Ton revenu vient de tomber. Les dépenses fixes partent automatiquement. À toi de gérer le reste du mois.',prof:'Chaque ménage reçoit son revenu du mois et gère son budget.'},
+ 2:{t:'Mois 2 · Bonne nouvelle !',cls:'ev-good',ic:'🎉',txt:'Prime exceptionnelle versée ce mois-ci, en plus de ton revenu habituel.',prof:'Chaque ménage touche une prime exceptionnelle égale à 15 % de son revenu habituel.'},
+ 3:{t:'Mois 3 · Mauvaise rumeur',cls:'ev-warn',ic:'📰',txt:'',prof:"Chaque ménage apprend une mauvaise nouvelle sur son emploi ou sa retraite. Rien n'est encore sûr."},
+ 4:{t:'Mois 4 · Flambée des prix',cls:'ev-bad',ic:'🔥',txt:'Alimentation +12 %, énergie +20 %. Ton revenu, lui, ne bouge pas.',prof:'Alimentation +12 %, énergie +20 %. Les revenus ne bougent pas.'}
+};
+const PRIX_ALI=1.12,PRIX_NRJ=1.2;
+
+/* ---------- Séance 3.2 ---------- */
+const POSTES=[['LOG','🏠','Loyer & logement','#38e1d6'],['NRJ','⚡','Énergie (électricité, gaz)','#ffb547'],['ALI','🥖','Alimentation','#ff8a5b'],['TRA','⛽','Carburant & transports','#3d8bff'],['NUM','📱','Téléphone & numérique','#4be08a'],['LOI','🎮','Loisirs & sorties','#ff5fa2'],['HAB','👕','Habillement','#9b7bff'],['SAN','💊','Santé & hygiène','#c7d2e8']];
+const CHOC={LOG:2,NRJ:15,ALI:5,TRA:8,NUM:-6,LOI:1,HAB:-1,SAN:1};
+const REV_UP=3;
+const PA_REAL=[[2020,.2],[2021,3.4],[2022,.4],[2023,1],[2024,2.7],[2025,-.4]];
+const S2T={1:{t:'Étape 1 · Compose ton panier',ic:'🧺',cls:'ev-info',txt:'Répartis 20 jetons entre tes postes de dépenses : ta vraie vie, ou celle de ta famille. 1 jeton = 5 % du budget.'},
+ 2:{t:'Étape 2 · Choc des prix',ic:'🔥',cls:'ev-bad',txt:'Cette année, les prix bougent… mais pas tous de la même façon. Quelle est TON inflation ?'},
+ 3:{t:'Étape 3 · Devine la conjoncture',ic:'📈',cls:'ev-info',txt:"Comment a évolué le pouvoir d'achat des Français chaque année de 2020 à 2025 ? Fais glisser les barres."}};
+
+/* ---------- Séance 3.3 ---------- */
+const P3=[['ALI','🥖','Alimentation',29,15.9],['LOG','🏠','Logement & énergie',24,31],['TRA','🚗','Transport',11,12.9],['HAB','👕','Habillement',8,3]];
+const S3T={1:{t:'Étape 1 · Prédis 2023',ic:'🔮',cls:'ev-info',txt:"Tu connais le budget des ménages en 1960 (barres grises). Fais glisser chaque barre pour prédire sa part en 2023."},
+ 2:{t:'Étape 2 · Valeur ou volume ?',ic:'⚖️',cls:'ev-warn',txt:'Pour chaque situation : est-ce surtout un effet des PRIX, ou des QUANTITÉS consommées (volume) ?'}};
+const VV=[
+ ['🏠','La part du logement dans le budget a augmenté, alors que la surface par habitant a peu progressé.','P',"Le logement est devenu relativement plus cher : c'est le prix relatif qui pousse la part en valeur."],
+ ['📶',"On consomme beaucoup plus de données mobiles qu'il y a dix ans, pour un forfait au prix comparable.",'V','Les quantités explosent pendant que le prix relatif baisse : effet volume.'],
+ ['🧺',"Au mois 4 de MÉNAGE_OS, la part de l'alimentation a augmenté sans que personne ne mange davantage.",'P','Seuls les prix ont augmenté : la part en valeur grimpe sans hausse des quantités.'],
+ ['🏕️',"Les ménages partent bien plus souvent en week-end et en vacances qu'en 1960.",'V','On consomme davantage de ce service : ce sont les quantités qui augmentent.']
+];
+
+/* ---------- Défis éclair : [question, bonne réponse, distracteurs, explication] ----------
+   Propositions de longueurs comparables. La position de la bonne réponse est tirée par élève :
+   chaque lettre A-D sert exactement une fois sur les 4 questions. */
+const QUIZ={
+ s1:[['La propension marginale à consommer se calcule ainsi :','ΔC / ΔR',['C / R','E / R','ΔE / C'],'Une variation rapportée à une variation.'],
+  ["Un ménage gagne 2 500 € et consomme 2 000 €. Son taux d'épargne est de :",'20 %',['80 %','25 %','50 %'],'Épargne = 500 € ; 500 / 2 500 = 20 %.'],
+  ["Après la rumeur du mois 3, l'épargne a augmenté. On parle d'épargne…",'de précaution',['de transmission','de consommation','obligatoire'],"Face à l'incertitude, on met de côté pour faire face à un imprévu."],
+  ["Le patrimoine d'un ménage est…",'un stock mesuré à une date',['un flux mesuré sur un mois','un revenu versé chaque année','une dépense de consommation'],"L'épargne (flux) vient alimenter le patrimoine (stock)."]],
+ s2:[["L'indice des prix à la consommation (IPC) mesure…","l'évolution du prix d'un panier moyen",['le revenu moyen des ménages français','le prix exact du panier de chaque ménage','la quantité de biens achetés chaque mois'],"L'Insee suit un panier moyen pondéré, représentatif de la consommation."],
+  ["Revenu +2 %, prix +3 %. Le pouvoir d'achat…","baisse d'environ 1 %",["augmente d'environ 1 %",'augmente de 5 %','ne change pas du tout'],'≈ 2 % − 3 % = −1 %.'],
+  ["Pourquoi l'inflation ressentie diffère-t-elle d'un ménage à l'autre ?",'Leurs paniers ne sont pas les mêmes',["L'IPC est recalculé chaque semaine",'Les prix changent selon les régions','Certains ménages ne paient pas la TVA'],'Chaque ménage a sa propre structure de dépenses.'],
+  ["En 2025, selon l'Insee, le pouvoir d'achat des ménages…",'a légèrement baissé',['a fortement augmenté','est resté inchangé','a doublé en un an'],'−0,4 % : le revenu (+0,5 %) a progressé moins vite que les prix.']],
+ s3:[["Un coefficient budgétaire, c'est…","la part d'un poste dans les dépenses",['le montant total dépensé chaque mois','la part du revenu qui est épargnée','le prix moyen des biens achetés'],'Dépense du poste / dépense totale de consommation × 100.'],
+  ["Entre 1960 et 2023, la part de l'alimentation…",'a presque été divisée par deux',['a plus que doublé','est restée à peu près stable','est passée devant celle du logement'],'De 29 % à 15,9 % du budget.'],
+  ['La part en valeur du logement augmente surtout parce que…','son prix relatif augmente',['on consomme beaucoup plus de m²',"les loyers sont exclus de l'IPC",'les ménages déménagent moins'],'Effet prix : le logement est devenu relativement plus cher.'],
+  ['Données mobiles : usage en forte hausse, part du budget faible. C\'est surtout un effet…','volume, car le prix relatif baisse',['prix, car le prix relatif augmente','revenu, car les salaires baissent','épargne, car on consomme moins'],'Les quantités explosent alors que le prix relatif baisse.']]
+};
+
+/* ================= OUTILS ================= */
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)],W=()=>$('#app .wrap');
+const eur=n=>Number.isFinite(n)?Math.round(n).toLocaleString('fr-FR')+' €':'—';
+const pct=(x,d=0)=>Number.isFinite(x)?(x*100).toLocaleString('fr-FR',{minimumFractionDigits:d,maximumFractionDigits:d})+' %':'—';
+const dec=(x,d=2)=>Number.isFinite(x)?x.toLocaleString('fr-FR',{minimumFractionDigits:d,maximumFractionDigits:d}):'—';
+const sgn=(x,d=1)=>Number.isFinite(x)?(x>0?'+':x<0?'−':'')+Math.abs(x).toLocaleString('fr-FR',{minimumFractionDigits:d,maximumFractionDigits:d}):'—';
+const rnd=(a,b)=>a+Math.random()*(b-a);
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const mean=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:NaN;
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const store={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}},del(k){try{localStorage.removeItem(k)}catch(e){}}};
+function toast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),2600)}
+async function api(path,{method='GET',body,prefer}={}){
+ const h={apikey:SB_KEY,Authorization:'Bearer '+SB_KEY,'Content-Type':'application/json'};if(prefer)h.Prefer=prefer;
+ const r=await fetch(SB_URL+path,{method,headers:h,body:body?JSON.stringify(body):undefined});
+ if(!r.ok)throw new Error(await r.text());const t=await r.text();return t?JSON.parse(t):null}
+const saveMove=(body)=>api('mos_moves?on_conflict=player,month',{method:'POST',body,prefer:'resolution=merge-duplicates,return=minimal'});
+const mv=(player,room,code,payload,extra={})=>({player,room,month:code,revenu:0,conso_total:0,epargne:0,conso:payload,...extra,updated_at:new Date().toISOString()});
+$('#fsbtn').onclick=()=>{const d=document.documentElement;if(!document.fullscreenElement&&!document.webkitFullscreenElement){const f=d.requestFullscreen||d.webkitRequestFullscreen;f?f.call(d):toast("Sur iPad : Partager → Sur l'écran d'accueil")}else{(document.exitFullscreen||document.webkitExitFullscreen).call(document)}};
+function donutBg(parts){const tot=parts.reduce((a,p)=>a+p[1],0)||1;let acc=0;return 'conic-gradient('+parts.map(([c,v])=>{const a=acc;acc+=v/tot*360;return `${c} ${a}deg ${acc}deg`}).join(',')+')'}
+
+/* Barres verticales à glisser au doigt */
+function dragBars(el,cfg){const {labels,min,max,step,vals,fmt,refs}=cfg,H=cfg.h||230;
+ const y=v=>H-(v-min)/(max-min)*H,z=y(min<0?0:min);
+ el.innerHTML=`<div class="dbars">${labels.map((l,i)=>`<div class="dcol"><div class="dval"></div><div class="dtrack" data-i="${i}" style="height:${H}px">${min<0?`<div class="dzero" style="top:${z}px"></div>`:''}${refs?`<div class="dref" style="top:${y(refs[i])}px;height:${z-y(refs[i])}px"></div>`:''}<div class="dfill"></div><div class="dknob"></div></div><div class="dlab">${l}</div></div>`).join('')}</div>`;
+ const tracks=[...el.querySelectorAll('.dtrack')];
+ const draw=i=>{const t=tracks[i],v=vals[i],f=t.querySelector('.dfill');const top=v>=0?y(v):z,h=Math.abs(y(v)-z);
+  f.style.top=top+'px';f.style.height=Math.max(2,h)+'px';f.classList.toggle('neg',v<0);t.querySelector('.dknob').style.top=y(v)+'px';t.parentNode.querySelector('.dval').textContent=fmt(v)};
+ tracks.forEach((t,i)=>{draw(i);const set=e=>{const r=t.getBoundingClientRect();let v=min+(1-(e.clientY-r.top)/r.height)*(max-min);v=Math.round(v/step)*step;v=Math.max(min,Math.min(max,v));vals[i]=+v.toFixed(2);draw(i);cfg.onChange&&cfg.onChange(vals)};
+  let on=false;t.addEventListener('pointerdown',e=>{e.preventDefault();on=true;try{t.setPointerCapture(e.pointerId)}catch(_){}set(e)});
+  t.addEventListener('pointermove',e=>{if(on){e.preventDefault();set(e)}});['pointerup','pointercancel','lostpointercapture'].forEach(n=>t.addEventListener(n,()=>on=false))});
+}
+
+/* ================= ÉCONOMIE 3.1 ================= */
+const prime=p=>Math.round(p.rev*.15/10)*10;
+const revenu=(p,k)=>p.rev+(k===2?prime(p):0);
+function fixedList(p,k){return p.fixed.map(([l,a,c,f])=>[l,Math.round(a*(k===4&&f===1?PRIX_NRJ:k===4&&f===2?PRIX_ALI:1)),c,k===4&&!!f])}
+const foodPrice=(p,i,k)=>Math.round(FOOD[i][2]*p.m*(k===4?PRIX_ALI:1)/5)*5;
+const shopPrice=(p,i)=>{const s=SHOP[i];return Math.round(s[2]*(s[4]?p.m:1)/5)*5};
+function buildMove(p,k,food,cart){const conso={},add=(c,a)=>conso[c]=(conso[c]||0)+a;
+ fixedList(p,k).forEach(([l,a,c])=>add(c,a));add('ALI',foodPrice(p,food,k));cart.forEach(i=>add(SHOP[i][3],shopPrice(p,i)));
+ const total=Object.values(conso).reduce((a,b)=>a+b,0),R=revenu(p,k);return {revenu:R,conso_total:total,epargne:R-total,conso}}
+function botMove(p,k,seed){const R=revenu(p,k),food=seed.food;let C=p.rev*seed.pmc;
+ if(k===2)C+=prime(p)*seed.pmg;if(k===3)C-=p.rev*seed.prec;if(k===4)C*=seed.infl;
+ const conso={};fixedList(p,k).forEach(([l,a,c])=>conso[c]=(conso[c]||0)+a);conso.ALI=(conso.ALI||0)+foodPrice(p,food,k);
+ const base=Object.values(conso).reduce((a,b)=>a+b,0),D=Math.max(0,Math.min(C,R)-base);
+ const w={LOI:rnd(.3,.55),HAB:rnd(.08,.2),EQU:rnd(.08,.25),TRA:rnd(.04,.12),SAN:rnd(.03,.1)},sw=Object.values(w).reduce((a,b)=>a+b,0);
+ Object.entries(w).forEach(([c,v])=>conso[c]=(conso[c]||0)+Math.round(D*v/sw));
+ const total=Object.values(conso).reduce((a,b)=>a+b,0);return {revenu:R,conso_total:total,epargne:R-total,conso}}
+const botSeed=p=>({pmc:p.pmc+rnd(-.05,.04),pmg:rnd(.38,.72),prec:rnd(.04,.1),infl:rnd(1.01,1.05),food:Math.floor(rnd(0,3))});
+function agg(moves,k){const m=moves.filter(x=>x.month===k);const R=m.reduce((a,x)=>a+x.revenu,0),C=m.reduce((a,x)=>a+x.conso_total,0);
+ const cat={};m.forEach(x=>Object.entries(x.conso||{}).forEach(([c,v])=>cat[c]=(cat[c]||0)+v));return {n:m.length,R,C,E:R-C,pmc:C/R,taux:(R-C)/R,cat}}
+function pmgClass(moves){const by={};moves.forEach(x=>{if(x.month<=2)(by[x.player]=by[x.player]||{})[x.month]=x});
+ let dR=0,dC=0;Object.values(by).forEach(o=>{if(o[1]&&o[2]){dR+=o[2].revenu-o[1].revenu;dC+=o[2].conso_total-o[1].conso_total}});return {dR,dC,pmg:dC/dR}}
+
+/* ================= ÉCONOMIE 3.2 / 3.3 ================= */
+const inflOf=w=>POSTES.reduce((a,[c])=>a+(w[c]||0)*CHOC[c]/100,0);
+const DEFAULT_W={LOG:30,NRJ:10,ALI:20,TRA:10,NUM:5,LOI:15,HAB:5,SAN:5};
+function botPanier(){const base={LOG:6,NRJ:2,ALI:4,TRA:2,NUM:1,LOI:3,HAB:1,SAN:1};const t={};Object.keys(base).forEach(c=>t[c]=Math.max(0,base[c]+Math.round(rnd(-2,2.4))));
+ let s=Object.values(t).reduce((a,b)=>a+b,0);const keys=Object.keys(t);while(s!==20){const c=keys[Math.floor(Math.random()*keys.length)];if(s>20&&t[c]>0){t[c]--;s--}else if(s<20){t[c]++;s++}}
+ const w={};keys.forEach(c=>w[c]=t[c]*5);return w}
+const quizPerm=()=>shuffle([0,1,2,3]);
+
+/* ================= ACCUEIL ================= */
+const qs=new URLSearchParams(location.search);
+function landing(){
+ W().innerHTML=`<div class="center fade"><div style="width:100%;display:grid;justify-items:center;gap:26px">
+  <div class="logo">MÉNAGE_OS <span>· économie · chapitre 3</span></div>
+  <h1 class="big">Ton revenu tombe.<br><span class="grad">Que vas-tu en faire ?</span></h1>
+  <div class="choice"><button class="glass btn" id="bS"><b>📱 Je suis élève</b><span class="sub">Rejoindre une partie avec le code affiché au tableau</span></button>
+  <button class="glass btn" id="bP"><b>🖥️ Je suis enseignant</b><span class="sub">Créer une séance et piloter l'écran projeté</span></button></div></div></div>`;
+ $('#bS').onclick=()=>studentJoin();$('#bP').onclick=()=>teacherStart();
+}
+
+/* ================= ÉLÈVE ================= */
+const ST={room:null,me:null,p:null,state:null,moves:{},food:null,cart:new Set(),anim:{},editing:false,timer:null,lastKey:'',idShown:false,perm:null};
+function studentJoin(code=''){
+ const saved=store.get('mos_student');
+ if(saved&&(!code||saved.room===code)){ST.room=saved.room;ST.me=saved.me;ST.p=PROFILES[saved.profile];ST.name=saved.name;return studentRun()}
+ W().innerHTML=`<div class="center fade"><div class="glass pad" style="max-width:460px;width:100%;display:grid;gap:14px">
+  <div class="logo">CONNEXION</div><h2>Rejoindre la partie</h2>
+  <input class="field" id="jc" maxlength="4" placeholder="CODE" value="${esc(code)}" autocapitalize="characters" autocomplete="off">
+  <input class="field" id="jn" maxlength="16" placeholder="Ton pseudo" autocomplete="off" style="font-family:'Space Grotesk',system-ui;letter-spacing:0;font-size:20px">
+  <button class="btn go" id="jb">Entrer →</button>
+  <p class="sub" style="margin:0;font-size:13px">Pseudo conseillé : prénom + initiale. Aucune autre donnée n'est demandée.</p></div></div>`;
+ $('#jb').onclick=async()=>{const c=$('#jc').value.trim().toUpperCase(),n=$('#jn').value.trim();if(c.length!==4||!n)return toast('Code à 4 lettres et pseudo requis');$('#jb').disabled=true;
+  try{const r=await api(`mos_rooms?code=eq.${c}&select=code`);if(!r.length){toast('Partie introuvable');$('#jb').disabled=false;return}
+   const pl=await api(`mos_players?room=eq.${c}&select=profile`);const cnt=PROFILES.map((_,i)=>pl.filter(x=>x.profile===i).length),mn=Math.min(...cnt);
+   const cand=cnt.map((v,i)=>v===mn?i:-1).filter(i=>i>=0),prof=cand[Math.floor(Math.random()*cand.length)];
+   const [me]=await api('mos_players',{method:'POST',body:{room:c,name:n.slice(0,16),profile:prof},prefer:'return=representation'});
+   store.set('mos_student',{room:c,me:me.id,profile:prof,name:me.name});ST.room=c;ST.me=me.id;ST.p=PROFILES[prof];ST.name=me.name;studentRun(true)}
+  catch(e){toast('Connexion impossible — vérifie le wifi');$('#jb').disabled=false}};
+}
+async function studentRun(fresh){
+ try{const m=await api(`mos_moves?player=eq.${ST.me}&select=*`);ST.moves={};m.forEach(x=>ST.moves[x.month]=x)}catch(e){}
+ ST.perm=store.get('mos_perm_'+ST.room)||quizPerm();store.set('mos_perm_'+ST.room,ST.perm);
+ const tick=async()=>{try{const [r]=await api(`mos_rooms?code=eq.${ST.room}&select=state`);if(!r){store.del('mos_student');clearInterval(ST.timer);return landing()}
+  const key=JSON.stringify(r.state);if(key!==ST.lastKey){ST.lastKey=key;ST.state=r.state;ST.editing=false;if(!ST.idShown)studentRender()}}catch(e){}};
+ await tick();if(fresh&&ST.state&&ST.state.mode==='s1'&&ST.state.phase==='lobby')showIdCard();
+ clearInterval(ST.timer);ST.timer=setInterval(tick,1500);
+}
+const smode=()=>(ST.state||{}).mode||'s1';
+function header(){const s=ST.state||{};const lab=s.phase==='task'?(smode()==='s1'?'MOIS '+s.k+'/4':'ÉTAPE '+s.k+'/'+SEANCES[smode()].tasks):s.phase==='reveal'?'AU TABLEAU':s.phase==='quiz'?'DÉFI ÉCLAIR':s.phase==='end'?'BILAN':'EN ATTENTE';
+ return `<div class="top"><div class="logo">MÉNAGE_OS <span>· ${smode()==='s1'?esc(ST.p.nom):esc(ST.name||'')}</span></div><div class="pill">${lab}</div></div>`}
+function idCardHTML(){const p=ST.p;return `<div class="glass idcard scan pop">
+  <div class="row" style="justify-content:space-between"><div class="logo">IDENTITÉ ÉCONOMIQUE</div><div class="pill">${p.age} ans</div></div>
+  <div class="row" style="margin-top:14px;gap:16px"><div class="av">${p.emoji}</div><div><h2 style="font-size:30px">${esc(p.nom)}</h2><div class="sub">${esc(p.sit)}</div></div></div>
+  <div class="kv"><div><small>REVENU DISPONIBLE / MOIS</small><b class="mono">${eur(p.rev)}</b></div><div><small>PATRIMOINE</small><b class="mono">${eur(p.pat)}</b></div>
+  <div><small>DÉPENSES FIXES / MOIS</small><b class="mono">${eur(p.fixed.reduce((a,f)=>a+f[1],0))}</b></div><div><small>TAILLE DU FOYER</small><b class="mono">${p.m<1.5?'1 pers.':p.m<2?'2 pers.':'4 pers.'}</b></div></div></div>`}
+function showIdCard(){ST.idShown=true;W().innerHTML=header()+`<div class="center fade"><div style="display:grid;gap:18px;justify-items:center">
+  <div class="sub mono">Voici ta vie pour les 4 prochains mois</div>${idCardHTML()}<button class="btn go" id="ok">C'est parti →</button></div></div>`;$('#ok').onclick=()=>{ST.idShown=false;studentRender()}}
+function seanceCard(){const S=SEANCES[smode()];return `<div class="glass pad pop" style="max-width:520px;text-align:left;display:grid;gap:8px"><div style="font-size:54px">${S.emoji}</div><div class="logo">CHAPITRE ${S.code}</div><h2 style="font-size:32px">${S.titre}</h2><div class="sub">${S.desc}</div></div>`}
+function studentRender(){const s=ST.state||{phase:'lobby'},m=smode();
+ if(s.phase==='lobby')return W().innerHTML=header()+`<div class="center fade"><div style="display:grid;gap:18px;justify-items:center">${m==='s1'?idCardHTML():seanceCard()}<div class="sub mono">▸ En attente du lancement par l'enseignant…</div></div></div>`;
+ if(s.phase==='task'){const c=codeOf(m,s.k);if(ST.moves[c]&&!ST.editing)return studentWaiting(c);return m==='s1'?studentMonth(s.k):m==='s2'?S2task(s.k):S3task(s.k)}
+ if(s.phase==='quiz')return studentQuiz();
+ if(s.phase==='end')return m==='s1'?endS1():m==='s2'?endS2():endS3();
+ W().innerHTML=header()+`<div class="center fade"><div style="display:grid;gap:12px;justify-items:center"><div style="font-size:70px">👀</div><h2 class="big" style="font-size:40px">Regarde le tableau</h2><div class="sub">La classe découvre ce que vos choix révèlent.</div></div></div>`;
+}
+function studentWaiting(c){const m=ST.moves[c];let body='';
+ if(c<=4)body=`<div class="kpis" style="width:min(560px,90vw)"><div class="glass kpi"><small>DÉPENSÉ</small><b>${eur(m.conso_total)}</b></div><div class="glass kpi"><small>MIS DE CÔTÉ</small><b style="color:var(--green)">${eur(m.epargne)}</b></div></div>`;
+ else if(c===22)body=`<div class="glass kpi" style="width:min(400px,90vw)"><small>TON INFLATION PERSONNELLE</small><b>${sgn(m.conso.inf)} %</b></div>`;
+ const edit=c!==22;
+ W().innerHTML=header()+`<div class="center fade"><div style="display:grid;gap:14px;justify-items:center"><div class="pop" style="font-size:64px">✅</div><h2 style="font-size:34px">Réponse envoyée</h2>${body}
+  <div class="sub mono">▸ En attente des autres…</div>${edit?'<button class="btn ghost" id="ed">Modifier ma réponse</button>':''}</div></div>`;
+ if(edit)$('#ed').onclick=()=>{ST.editing=true;if(c<=4)ST.anim[c]=true;studentRender()}}
+
+/* ---------- 3.1 : le mois ---------- */
+function studentMonth(k){
+ const p=ST.p,R=revenu(p,k),fx=fixedList(p,k),ev=EVENTS[k],first=!ST.anim[k];
+ if(first){ST.food=null;ST.cart=new Set()}
+ const evTxt=k===3?p.rumeur:k===2?`${ev.txt} <b class="mono" style="display:inline">+${eur(prime(p))}</b>`:ev.txt;
+ W().innerHTML=header()+`<div class="bank fade">
+ <div><div class="glass pad">
+  <div class="notif ${first?'pop':''}"><div class="ic">🏦</div><div><div class="mono" style="font-size:12px;color:var(--cyan)">VIREMENT REÇU</div><b>Revenu du mois : +${eur(R)}</b></div></div>
+  <div class="sect">Solde du compte</div><div class="balance" id="bal">${eur(first?0:R-fx.reduce((a,f)=>a+f[1],0))}</div>
+  <div class="sect">Prélèvements automatiques</div>
+  <div id="txs">${fx.map(([l,a,c,up])=>`<div class="tx ${first?'':'on'}"><span>${esc(l)}${up?' <span style="color:var(--red);font-size:12px">▲ prix</span>':''}</span><span class="a">−${eur(a)}</span></div>`).join('')}</div>
+  <div class="sect">Patrimoine</div><div class="mono" style="font-size:22px">${eur(p.pat+Object.values(ST.moves).filter(m=>m.month<k).reduce((a,m)=>a+m.epargne,0))}</div>
+ </div></div>
+ <div><div class="event ${ev.cls}"><b>${ev.ic} ${ev.t}</b>${evTxt}</div>
+  <div class="glass pad" id="shopbox" style="opacity:${first?0:1};transition:opacity .5s">
+   <div class="sect" style="margin-top:0">1 · Tes courses du mois (obligatoire)</div>
+   <div class="shop">${FOOD.map((f,i)=>`<button class="item ${ST.food===i?'on':''}" data-f="${i}"><span class="c">ALIM.</span><div class="e">${f[0]}</div><div class="n">${f[1]}</div><div class="p">${eur(foodPrice(p,i,k))}${k===4?'<span class="up">▲12 %</span>':''}</div></button>`).join('')}</div>
+   <div class="sect">2 · Tes envies (facultatif)</div>
+   <div class="shop">${SHOP.map((s,i)=>`<button class="item ${ST.cart.has(i)?'on':''}" data-s="${i}"><span class="c">${CATS[s[3]][0].split(' ')[0].toUpperCase()}</span><div class="e">${s[0]}</div><div class="n">${esc(s[1])}</div><div class="p">${eur(shopPrice(p,i))}</div></button>`).join('')}</div>
+  </div><div class="glass dock" id="dock"></div></div></div>`;
+ $$('[data-f]').forEach(b=>b.onclick=()=>{ST.food=+b.dataset.f;$$('[data-f]').forEach(x=>x.classList.toggle('on',x===b));dock(k)});
+ $$('[data-s]').forEach(b=>b.onclick=()=>{const i=+b.dataset.s;ST.cart.has(i)?ST.cart.delete(i):ST.cart.add(i);b.classList.toggle('on');dock(k)});
+ dock(k);
+ if(first){ST.anim[k]=true;const el=$('#bal'),rows=$$('.tx'),fixT=fx.reduce((a,f)=>a+f[1],0);let bal=0,i=0,q=0;
+  const showAll=()=>{rows.forEach(r=>r.classList.add('on'));el.textContent=eur(R-fixT);$('#shopbox').style.opacity=1};const safety=setTimeout(showAll,3800);
+  const up=setInterval(()=>{q+=.1;el.textContent=eur(R*Math.min(1,q));if(q>=1){clearInterval(up);bal=R;debit()}},60);
+  const debit=()=>{if(i>=rows.length){clearTimeout(safety);showAll();return}rows[i].classList.add('on');bal-=fx[i][1];el.textContent=eur(bal);i++;setTimeout(debit,330)}}
+}
+function dock(k){const p=ST.p,m=buildMove(p,k,ST.food??0,[...ST.cart]),ok=ST.food!==null&&m.epargne>=0;
+ $('#dock').innerHTML=`<div><small>DÉPENSÉ CE MOIS</small><b>${ST.food===null?'—':eur(m.conso_total)}</b></div>
+ <div><small>➜ PART SUR TON LIVRET</small><b class="${m.epargne<0?'neg':''}" style="${m.epargne>=0?'color:var(--green)':''}">${ST.food===null?'—':eur(m.epargne)}</b></div>
+ <button class="btn go" id="val" ${ok?'':'disabled'}>${m.epargne<0?'Solde négatif':'Valider le mois'}</button>`;
+ $('#val').onclick=async()=>{$('#val').disabled=true;const body={player:ST.me,room:ST.room,month:k,...m,updated_at:new Date().toISOString()};
+  try{await saveMove(body);ST.moves[k]=body;ST.editing=false;studentWaiting(k)}catch(e){toast('Envoi impossible, réessaie');$('#val').disabled=false}}}
+
+/* ---------- 3.2 : tâches élève ---------- */
+function S2task(k){const T=S2T[k],ev=`<div class="event ${T.cls}"><b>${T.ic} ${T.t}</b>${T.txt}</div>`;
+ if(k===1){const prev=ST.moves[21];const tok={};POSTES.forEach(([c])=>tok[c]=prev?prev.conso.w[c]/5:0);
+  W().innerHTML=header()+`<div class="fade" style="max-width:760px;margin:0 auto">${ev}<div class="glass pad">
+   <div class="row" style="justify-content:space-between;align-items:flex-start"><div><div class="sect" style="margin-top:0">Jetons restants</div><div class="mono" style="font-size:34px" id="left"></div></div><div class="donut" id="dn" style="width:120px;height:120px;margin:0"></div></div>
+   <div class="tokens" id="tk"></div><div class="jrows" style="margin-top:12px">${POSTES.map(([c,e,l,col])=>`<div class="jrow"><span class="e">${e}</span><span>${l}</span><button class="jb" data-m="${c}">−</button><span class="jv" id="v_${c}"></span><button class="jb" data-p="${c}">+</button><div class="bar"><i id="b_${c}" style="background:${col}"></i></div></div>`).join('')}</div>
+   <button class="btn go" id="okp" style="width:100%;margin-top:16px">Valider mon panier</button></div></div>`;
+  const draw=()=>{const used=Object.values(tok).reduce((a,b)=>a+b,0);$('#left').textContent=(20-used)+' / 20';$('#tk').innerHTML=[...Array(20)].map((_,i)=>`<i class="${i<used?'used':''}"></i>`).join('');
+   POSTES.forEach(([c])=>{$('#v_'+c).textContent=tok[c]*5+' %';$('#b_'+c).style.width=tok[c]*5+'%';$(`[data-m="${c}"]`).disabled=!tok[c];$(`[data-p="${c}"]`).disabled=used>=20});
+   $('#dn').style.background=used?donutBg(POSTES.map(([c,,,col])=>[col,tok[c]])):'rgba(255,255,255,.08)';$('#okp').disabled=used!==20;$('#okp').textContent=used===20?'Valider mon panier':`Place encore ${20-used} jeton${20-used>1?'s':''}`};
+  $$('[data-p]').forEach(b=>b.onclick=()=>{tok[b.dataset.p]++;draw()});$$('[data-m]').forEach(b=>b.onclick=()=>{tok[b.dataset.m]--;draw()});draw();
+  $('#okp').onclick=async()=>{const w={};POSTES.forEach(([c])=>w[c]=tok[c]*5);const body=mv(ST.me,ST.room,21,{w});$('#okp').disabled=true;try{await saveMove(body);ST.moves[21]=body;studentWaiting(21)}catch(e){toast('Envoi impossible');$('#okp').disabled=false}};
+ }
+ if(k===2){const w=ST.moves[21]?ST.moves[21].conso.w:DEFAULT_W,inf=inflOf(w),late=!ST.moves[21];
+  const opts=shuffle([['up','augmente'],['down','baisse'],['eq','reste stable']]);
+  W().innerHTML=header()+`<div class="fade" style="max-width:760px;margin:0 auto">${ev}<div class="glass pad">
+   ${late?'<div class="sub" style="margin-bottom:8px">Tu n\'as pas composé de panier : on utilise un panier type.</div>':''}
+   <div class="crow sub mono" style="font-size:12px"><span></span><span>POSTE</span><span>TON POIDS</span><span>PRIX</span></div>
+   ${POSTES.map(([c,e,l],i)=>`<div class="crow"><span style="font-size:22px">${e}</span><span>${l}</span><span class="mono">${w[c]} %</span><span class="ctag ${CHOC[c]>0?'up':CHOC[c]<0?'dn':'eq'}" id="t_${i}">${sgn(CHOC[c],0)} %</span></div>`).join('')}
+   <div style="text-align:center;margin:18px 0 6px"><div class="sect" style="margin:0">Ton inflation personnelle</div><div class="hero-num grad" style="font-size:72px" id="inf">0,0 %</div></div>
+   <div id="qbox" style="opacity:0;transition:opacity .5s"><h3 style="font-size:21px;margin:8px 0 12px">Ton revenu augmente de ${REV_UP} %. Ton pouvoir d'achat…</h3>
+   <div class="opts">${opts.map(([v,l],i)=>`<button class="opt" data-v="${v}"><b>${'ABC'[i]}</b>${l}</button>`).join('')}</div><div id="fb"></div></div></div></div>`;
+  let i=0;const tick=()=>{if(i<POSTES.length){$('#t_'+i).classList.add('on');i++;setTimeout(tick,260)}else{let q=0;const a=setInterval(()=>{q=Math.min(1,q+.08);$('#inf').textContent=sgn(inf*q)+' %';if(q>=1){clearInterval(a);$('#qbox').style.opacity=1}},50)}};
+  const safety=setTimeout(()=>{$$('.ctag').forEach(t=>t.classList.add('on'));$('#inf').textContent=sgn(inf)+' %';$('#qbox').style.opacity=1},5000);tick();
+  const good=REV_UP-inf>0.05?'up':REV_UP-inf<-0.05?'down':'eq';
+  $$('[data-v]').forEach(b=>b.onclick=async()=>{clearTimeout(safety);const ok=b.dataset.v===good;$$('[data-v]').forEach(x=>{x.disabled=true;if(x.dataset.v===good)x.classList.add('good')});if(!ok)b.classList.add('bad');
+   const pa=REV_UP-inf;$('#fb').innerHTML=`<div class="fb ${ok?'ok':'ko'}"><b>${ok?'Exact !':'Pas tout à fait.'}</b> Pouvoir d'achat ≈ revenu − prix = ${REV_UP} % − ${dec(inf,1)} % = <b class="mono">${sgn(pa)} %</b>. ${pa>0?'Ton revenu progresse plus vite que TES prix.':pa<0?"Tes prix progressent plus vite que ton revenu : même avec +3 %, tu peux acheter moins.":'Revenu et prix évoluent au même rythme.'}</div>
+    <button class="btn go" id="cont" style="width:100%;margin-top:12px">Continuer</button>`;
+   const body=mv(ST.me,ST.room,22,{inf:+inf.toFixed(2),ans:b.dataset.v,ok});try{await saveMove(body);ST.moves[22]=body}catch(e){toast('Envoi impossible')}
+   $('#cont').onclick=()=>studentWaiting(22)});
+ }
+ if(k===3){const prev=ST.moves[23];const vals=prev?[...prev.conso.g]:[1,1,1,1,1,1];
+  W().innerHTML=header()+`<div class="fade" style="max-width:820px;margin:0 auto">${ev}<div class="glass pad">
+   <div class="sub" style="text-align:center;margin-bottom:6px">Évolution annuelle du pouvoir d'achat des ménages (en %) — fais glisser chaque barre</div><div id="db"></div>
+   <button class="btn go" id="okg" style="width:100%;margin-top:14px">Valider mes prédictions</button></div></div>`;
+  dragBars($('#db'),{labels:PA_REAL.map(x=>x[0]),min:-2,max:5,step:.1,vals,fmt:v=>sgn(v)+' %'});
+  $('#okg').onclick=async()=>{const body=mv(ST.me,ST.room,23,{g:vals.map(v=>+v.toFixed(1))});$('#okg').disabled=true;try{await saveMove(body);ST.moves[23]=body;studentWaiting(23)}catch(e){toast('Envoi impossible');$('#okg').disabled=false}};
+ }
+}
+/* ---------- 3.3 : tâches élève ---------- */
+function S3task(k){const T=S3T[k],ev=`<div class="event ${T.cls}"><b>${T.ic} ${T.t}</b>${T.txt}</div>`;
+ if(k===1){const prev=ST.moves[31];const vals=prev?P3.map(([c])=>prev.conso.p[c]):P3.map(x=>x[3]);
+  W().innerHTML=header()+`<div class="fade" style="max-width:760px;margin:0 auto">${ev}<div class="glass pad">
+   <div class="row sub mono" style="justify-content:center;gap:18px;font-size:12px;margin-bottom:6px"><span>▮ gris = 1960</span><span style="color:var(--cyan)">▮ ta prédiction 2023</span></div><div id="db"></div>
+   <button class="btn go" id="okp" style="width:100%;margin-top:14px">Valider mes prédictions</button></div></div>`;
+  dragBars($('#db'),{labels:P3.map(([,e,l,a])=>`${e} ${l}<br><span class="mono">1960 : ${a} %</span>`),min:0,max:45,step:.5,vals,refs:P3.map(x=>x[3]),fmt:v=>dec(v,1)+' %',h:260});
+  $('#okp').onclick=async()=>{const p={};P3.forEach(([c],i)=>p[c]=vals[i]);const body=mv(ST.me,ST.room,31,{p});$('#okp').disabled=true;try{await saveMove(body);ST.moves[31]=body;studentWaiting(31)}catch(e){toast('Envoi impossible');$('#okp').disabled=false}};
+ }
+ if(k===2){const prev=ST.moves[32];const votes=prev?{...prev.conso.v}:{};const order=shuffle([0,1,2,3]);
+  W().innerHTML=header()+`<div class="fade" style="max-width:760px;margin:0 auto">${ev}<div class="grid">${order.map(i=>{const [e,t]=VV[i];const b=shuffle([['P','💶 Effet PRIX'],['V','📦 Effet VOLUME']]);
+   return `<div class="vcard"><div class="row" style="flex-wrap:nowrap;align-items:flex-start"><span class="e">${e}</span><span style="font-size:17px">${esc(t)}</span></div><div class="vbtns">${b.map(([v,l])=>`<button class="vb ${votes[i]===v?'on':''}" data-c="${i}" data-v="${v}">${l}</button>`).join('')}</div></div>`}).join('')}</div>
+   <button class="btn go" id="okv" style="width:100%;margin-top:14px">Valider</button></div>`;
+  const draw=()=>{const n=Object.keys(votes).length;$('#okv').disabled=n<4;$('#okv').textContent=n<4?`Encore ${4-n} situation${4-n>1?'s':''}`:'Valider mes réponses'};
+  $$('.vb').forEach(b=>b.onclick=()=>{votes[b.dataset.c]=b.dataset.v;$$(`.vb[data-c="${b.dataset.c}"]`).forEach(x=>x.classList.toggle('on',x===b));draw()});draw();
+  $('#okv').onclick=async()=>{const body=mv(ST.me,ST.room,32,{v:votes});$('#okv').disabled=true;try{await saveMove(body);ST.moves[32]=body;studentWaiting(32)}catch(e){toast('Envoi impossible');$('#okv').disabled=false}};
+ }
+}
+/* ---------- Défi éclair (élève) ---------- */
+function quizOptions(q,pos){const [,good,bad]=q;const arr=shuffle(bad);arr.splice(pos,0,good);return arr}
+function studentQuiz(){const Q=QUIZ[smode()];const i=Q.findIndex((_,j)=>!ST.moves[100+j]);
+ if(i<0){const sc=Q.filter((_,j)=>ST.moves[100+j].conso.ok).length;return W().innerHTML=header()+`<div class="center fade"><div style="display:grid;gap:12px;justify-items:center"><div class="pop" style="font-size:64px">⚡</div><h2 style="font-size:34px">Défi terminé : ${sc} / 4</h2><div class="sub mono">▸ Les résultats de la classe arrivent au tableau…</div></div></div>`}
+ const q=Q[i],opts=quizOptions(q,ST.perm[i]);
+ W().innerHTML=header()+`<div class="fade" style="max-width:720px;margin:0 auto"><div class="row" style="justify-content:space-between"><div class="logo">DÉFI ÉCLAIR</div><div class="pill">QUESTION ${i+1} / 4</div></div>
+  <h2 style="font-size:clamp(22px,3.4vw,30px);margin:16px 0">${esc(q[0])}</h2><div class="opts">${opts.map((o,j)=>`<button class="opt" data-o="${j}"><b>${'ABCD'[j]}</b>${esc(o)}</button>`).join('')}</div><div id="fb"></div></div>`;
+ $$('[data-o]').forEach(b=>b.onclick=async()=>{const o=opts[+b.dataset.o],ok=o===q[1];$$('[data-o]').forEach(x=>{x.disabled=true;if(opts[+x.dataset.o]===q[1])x.classList.add('good')});if(!ok)b.classList.add('bad');
+  $('#fb').innerHTML=`<div class="fb ${ok?'ok':'ko'}"><b>${ok?'Bien vu !':'Pas tout à fait.'}</b> ${esc(q[3])}</div><button class="btn go" id="nq" style="width:100%;margin-top:12px">${i<3?'Question suivante':'Terminer'}</button>`;
+  const body=mv(ST.me,ST.room,100+i,{a:o,ok});ST.moves[100+i]=body;try{await saveMove(body)}catch(e){toast('Envoi impossible')}$('#nq').onclick=studentQuiz});
+}
+const quizScore=()=>[0,1,2,3].filter(j=>ST.moves[100+j]&&ST.moves[100+j].conso.ok).length;
+function wrapped(cards){W().innerHTML=header()+`<div class="fade"><div class="logo" style="text-align:center;margin-bottom:10px">MON BILAN · faites glisser →</div>
+ <div class="wrapped" id="wr">${cards.map(([c,k,b,n])=>`<div class="wcard ${c}"><div class="k">${k}</div><div>${b}</div><div class="note mono">${n}</div></div>`).join('')}</div>
+ <div class="dots" id="dots">${cards.map((_,i)=>`<i class="${i?'':'on'}"></i>`).join('')}</div></div>`;
+ const wr=$('#wr');wr.onscroll=()=>{const i=Math.round(wr.scrollLeft/(wr.firstElementChild.offsetWidth+16));$$('#dots i').forEach((d,j)=>d.classList.toggle('on',i===j))}}
+const quizCard=()=>['w6','Défi éclair',`<div class="bn">${quizScore()} / 4</div><p>${quizScore()>=3?'Les notions sont en place.':'Relis la fiche du chapitre et retente le défi.'}</p>`,'Questions à positions de réponse tirées au hasard.'];
+/* ---------- Bilans élève ---------- */
+function endS1(){const p=ST.p,M=ST.moves,ms=[1,2,3,4].map(k=>M[k]).filter(Boolean);if(!ms.length)return wrapped([quizCard()]);
+ const R=ms.reduce((a,m)=>a+m.revenu,0),C=ms.reduce((a,m)=>a+m.conso_total,0),E=R-C,pmc=C/R;
+ const pmg=M[1]&&M[2]?(M[2].conso_total-M[1].conso_total)/(M[2].revenu-M[1].revenu):NaN,t1=M[1]?M[1].epargne/M[1].revenu:NaN,t3=M[3]?M[3].epargne/M[3].revenu:NaN;
+ const cat={};ms.forEach(m=>Object.entries(m.conso).forEach(([c,v])=>cat[c]=(cat[c]||0)+v));const parts=Object.entries(cat).sort((a,b)=>b[1]-a[1]);
+ const badge=t3-t1>=.04?['🛡️','Stratège de la précaution',"Quand la rumeur est arrivée, tu as resserré ton budget. C'est ce qu'ont fait les ménages français en 2025."]:pmc>=.92?['🦗','Cigale assumée','Tu consommes presque tout ce que tu gagnes. Ton patrimoine progresse peu.']:pmc<=.75?['🐜','Fourmi bâtisseuse','Tu mets beaucoup de côté : ton patrimoine grossit vite.']:['⚖️','Équilibriste',"Tu partages ton revenu entre plaisir d'aujourd'hui et sécurité de demain."];
+ wrapped([
+  ['w1','4 mois de vie',`<div class="bn">${eur(R)}</div><p>C'est le revenu disponible total de ${esc(p.nom)} sur 4 mois.</p>`,'Revenu disponible = Consommation + Épargne'],
+  ['w2','Ta propension moyenne à consommer',`<div class="bn">${dec(pmc)}</div><p>Sur 100 € gagnés, tu en as dépensé <b>${Math.round(pmc*100)}</b>.</p>`,`PMC = C / R = ${eur(C)} / ${eur(R)}`],
+  ['w3','Ta propension marginale à consommer',`<div class="bn">${dec(pmg)}</div><p>Sur ta prime de ${eur(prime(p))}, tu as dépensé <b>${M[1]&&M[2]?eur(M[2].conso_total-M[1].conso_total):'—'}</b> de plus.</p>`,'PmC = ΔC / ΔR'+(Number.isFinite(pmg)?(pmg<pmc?' · inférieure à ta PMC':' · supérieure à ta PMC : tu as « fêté » ta prime'):'')],
+  ['w4',"Ton taux d'épargne",`<div class="bn">${pct(E/R,1)}</div><p>Mois 1 : ${pct(t1)} → mois 3 (rumeur) : ${pct(t3)}.</p>`,`En France en 2025 : ${String(FRANCE_TAUX).replace('.',',')} % (Insee). Taux d'épargne = E / R`],
+  ['w5','Ton budget, poste par poste',`<div class="donut" style="background:${donutBg(parts.map(([c,v])=>[CATS[c][1],v]))}"></div><div class="legend">${parts.map(([c,v])=>`<span><i style="background:${CATS[c][1]}"></i>${CATS[c][0]} <b class="mono">${Math.round(v/C*100)} %</b></span>`).join('')}</div>`,"Ces parts s'appellent des coefficients budgétaires (chapitre 3.3)."],
+  ['w2',"Ton profil d'épargnant",`<div style="font-size:84px;line-height:1">${badge[0]}</div><h2 style="font-size:34px;margin-top:10px">${badge[1]}</h2><p>${badge[2]}</p>`,`Patrimoine : ${eur(p.pat)} → ${eur(p.pat+E)}. L'épargne est un flux, le patrimoine un stock.`],
+  quizCard()])}
+async function endS2(){let classInf=NaN;try{const m=await api(`mos_moves?room=eq.${ST.room}&month=eq.22&select=conso`);classInf=mean(m.map(x=>x.conso.inf))}catch(e){}
+ const w=ST.moves[21]?ST.moves[21].conso.w:null,inf=ST.moves[22]?ST.moves[22].conso.inf:(w?inflOf(w):NaN),g=ST.moves[23]?ST.moves[23].conso.g:null;
+ const err=g?mean(g.map((v,i)=>Math.abs(v-PA_REAL[i][1]))):NaN;
+ wrapped([
+  ['w3','Ton inflation personnelle',`<div class="bn">${sgn(inf)} %</div><p>${inf>classInf?'Plus élevée':'Plus faible'} que l'inflation moyenne de la classe.</p>`,`« IPC » de la classe : ${sgn(classInf)} %. L'IPC est une moyenne : personne n'a exactement le panier moyen.`],
+  ['w5','Ton panier',w?`<div class="donut" style="background:${donutBg(POSTES.map(([c,,,col])=>[col,w[c]]))}"></div><div class="legend">${POSTES.filter(([c])=>w[c]).map(([c,e,l,col])=>`<span><i style="background:${col}"></i>${l} <b class="mono">${w[c]} %</b></span>`).join('')}</div>`:'<p>Panier non renseigné.</p>','Le poids de chaque poste détermine ton inflation.'],
+  ['w2',`Ton revenu +${REV_UP} %`,`<div class="bn">${sgn(REV_UP-inf)} %</div><p>C'est l'évolution approximative de ton pouvoir d'achat.</p>`,"Pouvoir d'achat ≈ évolution du revenu − évolution des prix"],
+  ['w1','Devine la conjoncture',`<div class="bn">${dec(err,1)} pt</div><p>C'est ton écart moyen avec les vrais chiffres de l'Insee, année par année.</p>`,'Insee : '+PA_REAL.map(([y,v])=>`${y} ${sgn(v)}`).join(' · ')],
+  quizCard()])}
+function endS3(){const p=ST.moves[31]?ST.moves[31].conso.p:null,v=ST.moves[32]?ST.moves[32].conso.v:null;
+ const err=p?mean(P3.map(([c,,,,r])=>Math.abs(p[c]-r))):NaN,vv=v?VV.filter((x,i)=>v[i]===x[2]).length:0;
+ wrapped([
+  ['w1','Ta machine à remonter le temps',`<div class="bn">${dec(err,1)} pt</div><p>Écart moyen entre tes prédictions et la réalité de 2023.</p>`,P3.map(([c,,l,a,r])=>`${l} : ${p?dec(p[c],1):'—'} % (réel ${dec(r,1)} %)`).join(' · ')],
+  ['w5',"Ce qu'il faut retenir",`<h2 style="font-size:28px">L'alimentation recule, le logement et les services progressent.</h2><p>Quand le revenu augmente, la part des biens de première nécessité diminue : c'est la loi d'Engel.</p>`,'Coefficient budgétaire = dépense du poste / dépense totale × 100'],
+  ['w2','Valeur ou volume ?',`<div class="bn">${vv} / 4</div><p>${vv>=3?'Tu sais distinguer un effet prix d\'un effet quantité.':'Pense toujours : est-ce le prix, ou la quantité, qui a bougé ?'}</p>`,'Valeur = prix × quantités · Volume = quantités'],
+  quizCard()])}
+
+/* ================= ENSEIGNANT ================= */
+const TE={room:null,state:null,players:[],moves:[],seeds:{},timer:null,rendered:''};
+function teacherStart(){const saved=store.get('mos_teacher');
+ W().innerHTML=`<div class="fade" style="display:grid;gap:22px;padding-top:4vh"><div class="logo">CONSOLE ENSEIGNANT</div><h1 class="big">Chapitre 3 · <span class="grad">choisissez la séance</span></h1>
+  <div class="seances">${Object.entries(SEANCES).map(([m,S])=>`<button class="seance glass" data-m="${m}"><span class="e">${S.emoji}</span><span class="c">SOUS-THÈME ${S.code}</span><b>${S.titre}</b><span class="sub">${S.sous}</span><span style="font-size:14px">${S.desc}</span></button>`).join('')}</div>
+  ${saved?`<button class="btn" id="rs" style="justify-self:start">Reprendre la partie ${esc(saved)}</button>`:''}
+  <p class="sub" style="margin:0;font-size:14px">Projetez cet écran. Les élèves rejoignent avec leur iPad (QR code ou code à 4 lettres).</p></div>`;
+ $$('[data-m]').forEach(b=>b.onclick=async()=>{const L='ABCDEFGHJKMNPQRSTUVWXYZ';let code='';for(let i=0;i<4;i++)code+=L[Math.floor(Math.random()*L.length)];
+  try{await api('mos_rooms',{method:'POST',body:{code,state:{mode:b.dataset.m,phase:'lobby',k:0,step:0}},prefer:'return=minimal'});store.set('mos_teacher',code);teacherRun(code)}catch(e){toast('Création impossible')}});
+ if(saved)$('#rs').onclick=()=>teacherRun(saved);
+}
+async function setState(st){TE.state=st;TE.rendered='';try{await api(`mos_rooms?code=eq.${TE.room}`,{method:'PATCH',body:{state:st,updated_at:new Date().toISOString()},prefer:'return=minimal'})}catch(e){toast('Réseau : réessayez')}teacherRender()}
+async function teacherRun(code){TE.room=code;let r;try{[r]=await api(`mos_rooms?code=eq.${code}&select=state`)}catch(e){}
+ if(!r){store.del('mos_teacher');return teacherStart()}TE.state=r.state;
+ const tick=async()=>{try{TE.players=await api(`mos_players?room=eq.${code}&select=id,name,profile,bot&order=created_at`);TE.moves=await api(`mos_moves?room=eq.${code}&select=player,month,revenu,conso_total,epargne,conso`);
+  if(TE.state.phase==='task'||TE.state.phase==='quiz')await botsPlay();teacherRender()}catch(e){}};
+ await tick();clearInterval(TE.timer);TE.timer=setInterval(tick,1500);
+}
+const tmode=()=>TE.state.mode;
+async function addBots(n=20){const pre=['Léo','Inès','Noah','Jade','Adam','Lou','Sacha','Mila','Nino','Rose','Ilyes','Zoé','Tom','Lyna','Hugo','Maëlys','Rayan','Eva','Malo','Nour'];
+ await api('mos_players',{method:'POST',body:[...Array(n)].map((_,i)=>({room:TE.room,name:pre[i%pre.length]+' (fictif)',profile:i%PROFILES.length,bot:true})),prefer:'return=minimal'});toast(n+' élèves fictifs ajoutés')}
+function botPayload(b,code){const m=tmode(),p=PROFILES[b.profile];
+ if(m==='s1'&&code<=4){TE.seeds[b.id]=TE.seeds[b.id]||botSeed(p);return {player:b.id,room:TE.room,month:code,...botMove(p,code,TE.seeds[b.id])}}
+ if(code===21)return mv(b.id,TE.room,21,{w:botPanier()});
+ if(code===22){const own=TE.moves.find(x=>x.player===b.id&&x.month===21);const inf=inflOf(own?own.conso.w:DEFAULT_W);const good=REV_UP-inf>.05?'up':REV_UP-inf<-.05?'down':'eq';const ok=Math.random()<.72;return mv(b.id,TE.room,22,{inf:+inf.toFixed(2),ans:ok?good:'eq',ok:ok||good==='eq'})}
+ if(code===23)return mv(b.id,TE.room,23,{g:PA_REAL.map(([,v])=>+Math.max(-2,Math.min(5,1.2+rnd(-1.5,1.8)+(v-1)*rnd(0,.5))).toFixed(1))});
+ if(code===31){const p={};P3.forEach(([c,,,a,r])=>p[c]=Math.round(Math.max(0,a+(r-a)*rnd(-.2,1.1)+rnd(-4,4))*2)/2);return mv(b.id,TE.room,31,{p})}
+ if(code===32){const v={};VV.forEach((x,i)=>v[i]=Math.random()<.66?x[2]:(x[2]==='P'?'V':'P'));return mv(b.id,TE.room,32,{v})}
+ if(code>=100){const ok=Math.random()<.7;return mv(b.id,TE.room,code,{a:ok?QUIZ[m][code-100][1]:QUIZ[m][code-100][2][0],ok})}}
+async function botsPlay(){const s=TE.state,codes=s.phase==='quiz'?[100,101,102,103]:[codeOf(s.mode,s.k)];const have=new Set(TE.moves.map(m=>m.player+'|'+m.month));
+ const batch=[];TE.players.filter(p=>p.bot).forEach(b=>codes.forEach(c=>{if(!have.has(b.id+'|'+c)&&batch.length<30)batch.push(botPayload(b,c))}));
+ if(batch.length){await saveMove(batch);TE.moves.push(...batch)}}
+function tHeader(){const s=TE.state,S=SEANCES[s.mode];const lab=s.phase==='lobby'?'LOBBY':s.phase==='quiz'||s.phase==='quizreveal'?'DÉFI ÉCLAIR':s.phase==='end'?'BILAN':(s.mode==='s1'?'MOIS ':'ÉTAPE ')+s.k+'/'+S.tasks;
+ return `<div class="top"><div class="logo">MÉNAGE_OS <span>· ${S.code} ${S.titre} · partie ${TE.room}</span></div><div class="row"><div class="pill">${TE.players.length} élèves</div><div class="pill">${lab}</div></div></div>`}
+function teacherRender(){const s=TE.state,key=JSON.stringify(s)+'|'+TE.players.length+'|'+TE.moves.length;
+ if((s.phase==='reveal'||s.phase==='end'||s.phase==='quizreveal')&&TE.rendered===key)return;TE.rendered=key;
+ if(s.phase==='lobby')return tLobby();if(s.phase==='task'||s.phase==='quiz')return tLive();if(s.phase==='reveal')return tReveal();if(s.phase==='quizreveal')return tQuizReveal();if(s.phase==='end')return tEnd()}
+const avatar=p=>tmode()==='s1'?PROFILES[p.profile].emoji:'👤';
+function tLobby(){const url=location.origin+location.pathname+'?r='+TE.room,S=SEANCES[tmode()];
+ if(!$('#qr')){W().innerHTML=tHeader()+`<div class="tgrid fade"><div class="glass pad" style="text-align:center;display:grid;gap:14px;justify-items:center">
+  <div class="logo">REJOINDRE</div><div id="qr"></div><div class="code">${TE.room}</div><div class="sub mono" style="font-size:12px;word-break:break-all">${esc(url)}</div></div>
+  <div class="glass pad" style="display:grid;gap:16px;align-content:start"><div class="row"><span style="font-size:44px">${S.emoji}</span><div><div class="logo">SOUS-THÈME ${S.code}</div><h1 style="font-size:clamp(28px,4vw,46px)">${S.titre}</h1></div></div>
+  <div class="sub">${S.desc}</div><div class="players" id="pl"></div>
+  <div class="row"><button class="btn go" id="go1">Lancer ${tmode()==='s1'?'le mois 1':"l'étape 1"} →</button><button class="btn ghost" id="bots">+20 élèves fictifs (test)</button><button class="btn ghost" id="quit">Changer de séance</button></div></div></div>`;
+  try{new QRCode($('#qr'),{text:url,width:220,height:220,colorDark:'#070b14',colorLight:'#ffffff'})}catch(e){$('#qr').textContent='QR indisponible'}
+  $('#go1').onclick=()=>setState(nextState(TE.state));$('#bots').onclick=addBots;$('#quit').onclick=()=>{clearInterval(TE.timer);store.del('mos_teacher');teacherStart()}}
+ $('#pl').innerHTML=TE.players.map(p=>`<span class="chipp ${p.bot?'bot':''}">${avatar(p)} ${esc(p.name)}</span>`).join('')||'<span class="sub">En attente des premiers élèves…</span>';
+}
+function tLive(){const s=TE.state,m=s.mode,quiz=s.phase==='quiz',key=quiz?'quiz':s.k,codes=quiz?[100,101,102,103]:[codeOf(m,s.k)];
+ const done=new Set(TE.players.filter(p=>codes.every(c=>TE.moves.some(x=>x.player===p.id&&x.month===c))).map(p=>p.id));
+ if(!$('#mlive')||$('#mlive').dataset.k!=key){let ev;
+  if(quiz)ev=`<div class="event ev-info" style="font-size:20px"><b style="font-size:28px">⚡ Défi éclair</b>4 questions sur l'iPad. Chaque élève reçoit les réponses dans un ordre différent.</div>`;
+  else if(m==='s1'){const E=EVENTS[s.k];ev=`<div class="event ${E.cls}" style="font-size:20px"><b style="font-size:28px">${E.ic} ${E.t}</b>${E.prof}</div>`}
+  else{const T=(m==='s2'?S2T:S3T)[s.k];ev=`<div class="event ${T.cls}" style="font-size:20px"><b style="font-size:28px">${T.ic} ${T.t}</b>${T.txt}</div>`}
+  W().innerHTML=tHeader()+`<div class="fade" id="mlive" data-k="${key}" style="display:grid;gap:18px">${ev}
+  <div class="glass pad"><div class="row" style="justify-content:space-between"><h2>${quiz?'Élèves ayant terminé':'Réponses reçues'}</h2><div class="mono" style="font-size:28px" id="cnt"></div></div><div class="meter" style="margin-top:12px"><i id="prg" style="background:var(--cyan);width:0"></i></div><div class="players" id="pl" style="margin-top:14px"></div></div>
+  ${m==='s1'&&!quiz?`<div class="glass pad"><div class="sect" style="margin-top:0">Où part l'argent de la classe — en direct</div><div class="splitbar" id="sb"><div style="background:linear-gradient(90deg,#ff5fa2,#9b7bff);flex-basis:50%">—</div><div style="background:linear-gradient(90deg,#38e1d6,#4be08a);color:#05101a;flex-basis:50%">—</div></div><div class="row sub mono" style="justify-content:space-between;margin-top:8px;font-size:13px"><span>CONSOMMÉ</span><span>ÉPARGNÉ</span></div></div>`:''}
+  <div class="row"><button class="btn go" id="rv">${quiz?'Voir les résultats du défi →':'Révéler ce que vos choix disent →'}</button><button class="btn ghost" id="bots">+20 élèves fictifs</button></div></div>`;
+  $('#rv').onclick=()=>setState(nextState(TE.state));$('#bots').onclick=addBots}
+ const n=TE.players.length;$('#cnt').textContent=done.size+' / '+n;$('#prg').style.width=(n?done.size/n*100:0)+'%';
+ $('#pl').innerHTML=TE.players.map(p=>`<span class="chipp ${done.has(p.id)?'done':''} ${p.bot?'bot':''}">${avatar(p)} ${esc(p.name)}</span>`).join('');
+ if(m==='s1'&&!quiz){const a=agg(TE.moves,s.k);if(a.n){const sb=$('#sb').children;sb[0].style.flexBasis=(a.pmc*100)+'%';sb[0].textContent=a.pmc>.12?Math.round(a.pmc*100)+' %':'';sb[1].style.flexBasis=(a.taux*100)+'%';sb[1].textContent=a.taux>.06?Math.round(a.taux*100)+' %':''}}
+}
+function revealNav(){const s=TE.state,S=SEANCES[s.mode],last=s.step>=S.reveals[s.k]-1;
+ const lab=!last?'Révélation suivante →':s.k<S.tasks?(s.mode==='s1'?`Lancer le mois ${s.k+1} →`:`Lancer l'étape ${s.k+1} →`):'Défi éclair ⚡';
+ return `<div class="steps">${[...Array(S.reveals[s.k])].map((_,i)=>`<i class="${i<=s.step?'on':''}"></i>`).join('')}</div><div class="row" style="justify-content:center"><button class="btn go" id="nx">${lab}</button></div>`}
+function animateBars(){setTimeout(()=>$$('[data-w]').forEach(i=>i.style.width=i.dataset.w),80)}
+function tReveal(){const s=TE.state,h=s.mode==='s1'?revS1(s.k,s.step):s.mode==='s2'?revS2(s.k,s.step):revS3(s.k,s.step);
+ W().innerHTML=tHeader()+`<div class="reveal fade">${h}${revealNav()}</div>`;$('#nx').onclick=()=>setState(nextState(TE.state));animateBars();
+ if(s.mode==='s3'&&s.k===1&&s.step===0)timeMachine();}
+const H2=t=>`<h2 style="font-size:clamp(24px,3.8vw,42px)">${t}</h2>`,TAG=t=>`<div class="sub mono">${t}</div>`;
+function revS1(k,step){const a1=agg(TE.moves,1),ak=agg(TE.moves,k);
+ if(k===1&&step===0)return TAG('MOIS 1 · CE QUE VOUS AVEZ FAIT')+H2('Sur 100 € de revenu, la classe en a dépensé…')+`<div class="hero-num grad pop">${Math.round(a1.pmc*100)} €</div><div class="formula">C / R = ${eur(a1.C)} / ${eur(a1.R)} = ${dec(a1.pmc)}</div><div class="stamp">PROPENSION MOYENNE À CONSOMMER</div><div class="sub">Le reste — ${Math.round(a1.taux*100)} € sur 100 — c'est votre <b style="color:var(--ink)">taux d'épargne</b> (propension moyenne à épargner).</div>`;
+ if(k===1){const rows=PROFILES.map((p,i)=>{const ids=new Set(TE.players.filter(x=>x.profile===i).map(x=>x.id));const m=TE.moves.filter(x=>x.month===1&&ids.has(x.player));const R=m.reduce((a,x)=>a+x.revenu,0),E=m.reduce((a,x)=>a+x.epargne,0);return {p,t:R?E/R:NaN}}).sort((a,b)=>a.p.rev-b.p.rev);const mx=Math.max(.01,...rows.map(r=>r.t||0));
+  return TAG('MOIS 1 · QUI ÉPARGNE LE PLUS ?')+H2("Taux d'épargne par ménage, du plus petit au plus gros revenu")+`<div class="hbars">${rows.map(r=>`<div class="hb"><span>${r.p.emoji} ${esc(r.p.nom)} <span class="sub mono" style="font-size:12px">${eur(r.p.rev)}</span></span><div class="t"><i data-w="${Number.isFinite(r.t)?Math.max(0,r.t)/mx*100:0}%"></i></div><span class="v">${pct(r.t)}</span></div>`).join('')}</div><div class="stamp">DÉTERMINANTS : REVENU · ÂGE · CYCLE DE VIE</div><div class="sub">Plus le revenu est élevé, plus la part épargnée est forte. Et l'âge compte : on n'épargne pas de la même façon à 19, 41 ou 71 ans.</div>`}
+ if(k===2){const g=pmgClass(TE.moves);return TAG('MOIS 2 · LA PRIME')+H2(`Vous avez reçu <span class="mono">${eur(g.dR)}</span> de primes. Vous en avez dépensé…`)+`<div class="hero-num grad pop">${eur(g.dC)}</div><div class="formula">ΔC / ΔR = ${eur(g.dC)} / ${eur(g.dR)} = ${dec(g.pmg)}</div><div class="stamp">PROPENSION MARGINALE À CONSOMMER</div><div class="kpis" style="max-width:640px;margin:0 auto;width:100%"><div class="glass kpi"><small>PMC (mois 1)</small><b>${dec(a1.pmc)}</b></div><div class="glass kpi"><small>PmC (la prime)</small><b style="color:var(--cyan)">${dec(g.pmg)}</b></div></div><div class="sub">${g.pmg<a1.pmc?'PmC &lt; PMC : quand le revenu augmente, on dépense une part plus faible du supplément. La part épargnée augmente.':"Ici la classe a davantage dépensé la prime que son revenu habituel. En moyenne, en France, c'est l'inverse : un revenu supplémentaire est davantage épargné."}</div>`}
+ if(k===3){const ts=[1,2,3].map(m=>agg(TE.moves,m).taux),d=(ts[2]-ts[0])*100,pts=ts.map((t,i)=>[80+i*220,230-(Number.isFinite(t)?t:0)*400]);
+  return TAG('MOIS 3 · LA RUMEUR')+H2("Votre taux d'épargne, mois après mois")+`<svg viewBox="0 0 620 270" style="max-width:720px;width:100%;margin:0 auto"><line x1="40" y1="230" x2="600" y2="230" stroke="rgba(255,255,255,.2)"/><defs><linearGradient id="gl"><stop offset="0" stop-color="#38e1d6"/><stop offset="1" stop-color="#ff5fa2"/></linearGradient></defs>
+   <polyline points="${pts.map(p=>p.join(',')).join(' ')}" fill="none" stroke="url(#gl)" stroke-width="5" stroke-linecap="round" stroke-dasharray="900" stroke-dashoffset="900"><animate attributeName="stroke-dashoffset" to="0" dur="1.4s" fill="freeze"/></polyline>
+   ${pts.map((p,i)=>`<circle cx="${p[0]}" cy="${p[1]}" r="9" fill="#070b14" stroke="${i===2?'#ff5fa2':'#38e1d6'}" stroke-width="4"/><text x="${p[0]}" y="${p[1]-20}" fill="#eaf2ff" font-size="20" font-weight="600" text-anchor="middle">${pct(ts[i],1)}</text><text x="${p[0]}" y="258" fill="#8797b3" font-size="15" text-anchor="middle">${['Mois 1','Mois 2 · prime','Mois 3 · rumeur'][i]}</text>`).join('')}</svg>
+   <div class="hero-num ${d>=0?'grad':''} pop" style="font-size:clamp(50px,8vw,90px)">${sgn(d)} pts</div><div class="stamp">ÉPARGNE DE PRÉCAUTION</div><div class="sub">Votre revenu n'a pas changé entre le mois 1 et le mois 3 : seule l'<b style="color:var(--ink)">incertitude</b> a changé. En France, au 2<sup>e</sup> trimestre 2025, le taux d'épargne a atteint 18,9 % — un record depuis plus de 40 ans hors Covid.</div>`}
+ if(k===4&&step===0){const a3=agg(TE.moves,3);return TAG('MOIS 4 · LA FLAMBÉE DES PRIX')+H2("Même revenu. Prix de l'alimentation +12 %, énergie +20 %.")+`<div class="kpis" style="max-width:820px;margin:0 auto;width:100%"><div class="glass kpi"><small>REVENU (mois 3 → 4)</small><b style="font-size:22px">${eur(a3.R)} → ${eur(ak.R)}</b></div><div class="glass kpi"><small>ALIMENTATION + ÉNERGIE</small><b style="color:var(--red);font-size:22px">▲ hausse des prix</b></div><div class="glass kpi"><small>ÉPARGNE DE LA CLASSE</small><b style="font-size:22px">${eur(a3.E)} → ${eur(ak.E)}</b></div></div>
+  <div class="hero-num grad pop" style="font-size:clamp(42px,7vw,80px)">Revenu stable · Prix ↑</div><div class="stamp">POUVOIR D'ACHAT ↓</div><div class="formula">Évolution du pouvoir d'achat ≈ évolution du revenu − évolution des prix</div><div class="sub">Avec le même revenu, vous pouvez acheter moins : votre pouvoir d'achat a baissé. C'est ce qu'ont vécu les ménages français en 2025 (−0,4 %, Insee). Séance suivante : chacun son inflation.</div>`}
+ const s1=(a1.cat.ALI||0)/a1.C,s4=(ak.cat.ALI||0)/ak.C;
+ return TAG("MOIS 4 · LA PART DE L'ALIMENTATION")+H2("Part de l'alimentation dans les dépenses de la classe")+`<div class="hbars"><div class="hb"><span>Mois 1</span><div class="t"><i data-w="${s1*300}%"></i></div><span class="v">${pct(s1,1)}</span></div><div class="hb"><span>Mois 4 (prix ↑)</span><div class="t"><i data-w="${s4*300}%" style="background:linear-gradient(90deg,#ffb547,#ff5d6c)"></i></div><span class="v">${pct(s4,1)}</span></div></div><div class="stamp">COEFFICIENT BUDGÉTAIRE · EFFET PRIX</div><div class="sub">Avez-vous mangé davantage ? Non : c'est le <b style="color:var(--ink)">prix relatif</b> de l'alimentation qui a augmenté. Une part qui grimpe en valeur ne veut pas dire plus de quantités. Rendez-vous au 3.3.</div>`;
+}
+function revS2(k,step){const M=c=>TE.moves.filter(x=>x.month===c),nm=id=>{const p=TE.players.find(x=>x.id===id);return p?esc(p.name):'?'};
+ if(k===1){const ws=M(21).map(x=>x.conso.w),av={},mn={},mx={};POSTES.forEach(([c])=>{const v=ws.map(w=>w[c]);av[c]=mean(v);mn[c]=Math.min(...v);mx[c]=Math.max(...v)});
+  return TAG('ÉTAPE 1 · VOS PANIERS')+H2('Le panier moyen de la classe')+`<div class="hbars">${POSTES.map(([c,e,l])=>`<div class="hb"><span>${e} ${l}</span><div class="t"><i data-w="${(av[c]||0)/40*100}%"></i></div><span class="v">${dec(av[c],0)} %</span></div>`).join('')}</div>
+  <div class="sub mono" style="font-size:14px">Mais derrière la moyenne : le logement va de ${dec(mn.LOG,0)} % à ${dec(mx.LOG,0)} % selon les élèves, les loisirs de ${dec(mn.LOI,0)} % à ${dec(mx.LOI,0)} %.</div>
+  <div class="stamp">PANIER DE BIENS · INDICE DES PRIX (IPC)</div><div class="sub">L'Insee fait exactement la même chose à l'échelle du pays : un panier moyen, pondéré par le poids de chaque poste, actualisé chaque année. L'évolution de son prix, c'est l'inflation.</div>`}
+ if(k===2&&step===0){const r=M(22),infs=r.map(x=>x.conso.inf),av=mean(infs),lo=r.reduce((a,x)=>!a||x.conso.inf<a.conso.inf?x:a,null),hi=r.reduce((a,x)=>!a||x.conso.inf>a.conso.inf?x:a,null);
+  const A=-6,B=15,X=v=>(v-A)/(B-A)*100,cnt={};
+  return TAG('ÉTAPE 2 · LE CHOC DES PRIX')+H2('Chaque point = l\'inflation personnelle d\'un élève')+`<div class="dotplot">${[-5,0,5,10,15].map(t=>`<span class="tk" style="left:${X(t)}%">${sgn(t,0)} %</span>`).join('')}<div class="ax"></div>
+   ${infs.map((v,i)=>{const b=Math.round(v*2)/2;cnt[b]=(cnt[b]||0)+1;return `<span class="d" style="left:${X(v)}%;top:${Math.max(4,150-cnt[b]*18)}px;animation-delay:${i*40}ms"></span>`}).join('')}<div class="mean" style="left:${X(av)}%"><span>moyenne ${sgn(av)} %</span></div></div>
+   <div class="kpis" style="max-width:760px;margin:0 auto;width:100%"><div class="glass kpi"><small>LA PLUS FAIBLE</small><b style="color:var(--green)">${lo?sgn(lo.conso.inf):'—'} %</b><span class="sub">${lo?nm(lo.player):''}</span></div><div class="glass kpi"><small>« IPC » DE LA CLASSE</small><b style="color:var(--amber)">${sgn(av)} %</b></div><div class="glass kpi"><small>LA PLUS FORTE</small><b style="color:var(--red)">${hi?sgn(hi.conso.inf):'—'} %</b><span class="sub">${hi?nm(hi.player):''}</span></div></div>
+   <div class="stamp">INFLATION ≠ INFLATION RESSENTIE</div><div class="sub">Mêmes hausses de prix pour tout le monde… mais pas les mêmes paniers. L'IPC est une moyenne : personne ne vit exactement l'inflation officielle.</div>`}
+ if(k===2){const r=M(22),gain=r.filter(x=>REV_UP-x.conso.inf>.05).length,lose=r.filter(x=>REV_UP-x.conso.inf<-.05).length,okp=r.length?r.filter(x=>x.conso.ok).length/r.length:NaN;
+  return TAG('ÉTAPE 2 · REVENU +3 %')+H2(`Tout le monde a reçu +${REV_UP} % de revenu. Résultat :`)+`<div class="kpis" style="max-width:760px;margin:0 auto;width:100%"><div class="glass kpi" style="text-align:center"><small>POUVOIR D'ACHAT EN HAUSSE</small><b style="font-size:64px;color:var(--green)">${gain}</b></div><div class="glass kpi" style="text-align:center"><small>POUVOIR D'ACHAT EN BAISSE</small><b style="font-size:64px;color:var(--red)">${lose}</b></div></div>
+  <div class="formula">Pouvoir d'achat ≈ évolution du revenu − évolution des prix</div><div class="stamp">POUVOIR D'ACHAT · REVENU NOMINAL ≠ RÉEL</div><div class="sub">Un revenu qui augmente en euros (nominal) ne garantit rien : seul compte l'écart avec les prix (réel). ${pct(okp)} de la classe a trouvé la bonne réponse pour son propre cas.</div>`}
+ const gs=M(23).map(x=>x.conso.g),av=PA_REAL.map((_,i)=>mean(gs.map(g=>g[i]))),best=M(23).map(x=>({p:x.player,e:mean(x.conso.g.map((v,i)=>Math.abs(v-PA_REAL[i][1])))})).sort((a,b)=>a.e-b.e)[0];
+ const A=-2,B=5,Y=v=>230-(v-A)/(B-A)*210,z=Y(0);
+ return TAG('ÉTAPE 3 · LA CONJONCTURE')+H2("Pouvoir d'achat des ménages : vos prédictions vs l'Insee")+`<svg viewBox="0 0 640 270" style="max-width:780px;width:100%;margin:0 auto"><line x1="30" y1="${z}" x2="620" y2="${z}" stroke="rgba(255,255,255,.35)"/>
+  ${PA_REAL.map(([y,v],i)=>{const x=60+i*95,top=Math.min(Y(v),z),h=Math.abs(Y(v)-z),gy=Math.min(Y(av[i]),z),gh=Math.abs(Y(av[i])-z);
+   return `<rect x="${x-4}" y="${gy}" width="62" height="${Math.max(2,gh)}" fill="none" stroke="#ffb547" stroke-width="2" stroke-dasharray="5 4" rx="4"/><rect x="${x+6}" y="${top}" width="42" height="${Math.max(2,h)}" rx="4" fill="${v<0?'#ff5d6c':'url(#gb)'}" style="transform-origin:0 ${z}px;animation:grow .9s ${.2+i*.15}s both"/>
+   <text x="${x+27}" y="${v<0?Y(v)+18:Y(v)-8}" fill="#eaf2ff" font-size="16" font-weight="600" text-anchor="middle">${sgn(v)}</text><text x="${x+27}" y="262" fill="#8797b3" font-size="14" text-anchor="middle">${y}</text>`}).join('')}
+  <defs><linearGradient id="gb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#38e1d6"/><stop offset="1" stop-color="#9b7bff"/></linearGradient></defs></svg>
+  <div class="row sub mono" style="justify-content:center;font-size:13px;gap:18px"><span style="color:#38e1d6">▮ Insee (réel)</span><span style="color:#ffb547">⬚ moyenne de vos prédictions</span></div>
+  ${best?`<div class="sub">🎯 Meilleure prédiction : <b style="color:var(--ink)">${nm(best.p)}</b> (écart moyen ${dec(best.e,1)} pt)</div>`:''}
+  <div class="stamp">ÉVOLUTION DU POUVOIR D'ACHAT</div><div class="sub">Sur longue période, le pouvoir d'achat des ménages a fortement progressé grâce aux gains de productivité. Mais il peut reculer certaines années : en 2025, le revenu (+0,5 %) a progressé moins vite que les prix (Insee).</div>`;
+}
+function revS3(k,step){const M=c=>TE.moves.filter(x=>x.month===c),nm=id=>{const p=TE.players.find(x=>x.id===id);return p?esc(p.name):'?'};
+ if(k===1&&step===0){const ps=M(31),av={};P3.forEach(([c])=>av[c]=mean(ps.map(x=>x.conso.p[c])));const best=ps.map(x=>({p:x.player,e:mean(P3.map(([c,,,,r])=>Math.abs(x.conso.p[c]-r)))})).sort((a,b)=>a.e-b.e)[0];
+  return `<div class="year grad" id="yr">1960</div><div class="tm">${P3.map(([c,e,l,a,r])=>`<div class="tmr"><span>${e} ${l}</span><div class="tmt"><i data-a="${a}" data-r="${r}" style="width:${a/40*100}%"></i><span class="gh" data-l="vous : ${dec(av[c],0)} %" style="left:${(av[c]||0)/40*100}%"></span></div><span class="tmv" data-a="${a}" data-r="${r}">${a} %</span></div>`).join('')}</div>
+   <div class="sub mono" style="font-size:13px">▮ orange = moyenne de vos prédictions</div>${best?`<div class="sub">🎯 Meilleure prédiction : <b style="color:var(--ink)">${nm(best.p)}</b> (écart moyen ${dec(best.e,1)} pt)</div>`:''}
+   <div class="stamp" style="animation-delay:3.4s">COEFFICIENTS BUDGÉTAIRES</div><div class="sub">Part de chaque poste dans la dépense de consommation des ménages (Insee). Logement 2023 : ordre de grandeur.</div>`}
+ if(k===1)return TAG('ÉTAPE 1 · CE QUE RACONTE LA MACHINE')+H2('Pourquoi le budget s\'est-il déformé ?')+`<div class="kpis" style="max-width:900px;margin:0 auto;width:100%;text-align:left">
+   <div class="glass kpi"><small>🥖 ALIMENTATION</small><b>29 % → 15,9 %</b><span class="sub">Quand le revenu augmente, la dépense alimentaire augmente moins vite : sa part baisse.</span></div>
+   <div class="glass kpi"><small>🏠 LOGEMENT</small><b>24 % → ≈ 31 %</b><span class="sub">Le logement pèse de plus en plus : loyers et prix de l'immobilier ont fortement progressé.</span></div>
+   <div class="glass kpi"><small>🛎️ SERVICES</small><b>½ → ⅔</b><span class="sub">Santé, loisirs, communication : les services représentent aujourd'hui les deux tiers de la consommation.</span></div></div>
+   <div class="stamp">LOI D'ENGEL</div><div class="formula">Coefficient budgétaire = dépense du poste / dépense totale × 100</div>`;
+ const vs=M(32),rows=VV.map((x,i)=>({x,ok:vs.length?vs.filter(v=>v.conso.v[i]===x[2]).length/vs.length:NaN}));
+ return TAG('ÉTAPE 2 · VALEUR OU VOLUME ?')+H2('Vos réponses, situation par situation')+`<div style="max-width:960px;margin:0 auto;width:100%">${rows.map(({x,ok})=>`<div class="qrow"><div>${x[0]} ${esc(x[1])}<small>${x[2]==='P'?'💶 EFFET PRIX':'📦 EFFET VOLUME'} — ${esc(x[3])}</small></div><div class="hb" style="grid-template-columns:1fr"><div class="t"><i data-w="${(ok||0)*100}%"></i></div></div><span class="mono" style="font-weight:600">${pct(ok)}</span></div>`).join('')}</div>
+  <div class="stamp">VALEUR · VOLUME · PRIX RELATIF</div><div class="sub">En valeur = prix × quantités. En volume = quantités seules. Devant une part qui bouge, toujours se demander : est-ce le prix, ou la quantité ?</div>`;
+}
+function timeMachine(){const yr=$('#yr'),bars=$$('.tmt i'),vals=$$('.tmv');let t=0;
+ const it=setInterval(()=>{t=Math.min(1,t+1/60);const e=t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;yr.textContent=Math.round(1960+63*e);
+  bars.forEach(b=>{const a=+b.dataset.a,r=+b.dataset.r;b.style.width=(a+(r-a)*e)/40*100+'%'});vals.forEach(v=>{const a=+v.dataset.a,r=+v.dataset.r;v.textContent=dec(a+(r-a)*e,1)+' %'});if(t>=1)clearInterval(it)},50)}
+function tQuizReveal(){const Q=QUIZ[tmode()],rows=Q.map((q,i)=>{const r=TE.moves.filter(x=>x.month===100+i);return {q,ok:r.length?r.filter(x=>x.conso.ok).length/r.length:NaN}});
+ W().innerHTML=tHeader()+`<div class="reveal fade">${TAG('DÉFI ÉCLAIR · RÉSULTATS DE LA CLASSE')}${H2('Taux de bonnes réponses')}<div style="max-width:960px;margin:0 auto;width:100%">${rows.map(({q,ok},i)=>`<div class="qrow"><div><b>${i+1}.</b> ${esc(q[0])}<small>✓ ${esc(q[1])}</small></div><div class="hb" style="grid-template-columns:1fr"><div class="t"><i data-w="${(ok||0)*100}%"></i></div></div><span class="mono" style="font-weight:600">${pct(ok)}</span></div>`).join('')}</div>
+ <div class="sub">Reprenez la question la moins réussie avec la classe.</div><div class="row" style="justify-content:center"><button class="btn go" id="nx">Bilan de la séance →</button></div></div>`;$('#nx').onclick=()=>setState(nextState(TE.state));animateBars()}
+function tEnd(){const m=tmode(),quizOk=mean([0,1,2,3].map(i=>{const r=TE.moves.filter(x=>x.month===100+i);return r.length?r.filter(x=>x.conso.ok).length/r.length:NaN}).filter(Number.isFinite));let kp='',chips=[],title='';
+ if(m==='s1'){const all=[1,2,3,4].map(k=>agg(TE.moves,k)),R=all.reduce((a,x)=>a+x.R,0),C=all.reduce((a,x)=>a+x.C,0),E=R-C,ids=new Set(TE.moves.filter(x=>x.month<=4).map(x=>x.player)),pat=TE.players.filter(p=>ids.has(p.id)).reduce((a,p)=>a+PROFILES[p.profile].pat,0);
+  title='Votre classe <span class="grad">vs la France</span>';
+  kp=`<div class="glass kpi"><small>PMC DE LA CLASSE</small><b>${dec(C/R)}</b></div><div class="glass kpi"><small>PmC (PRIME)</small><b>${dec(pmgClass(TE.moves).pmg)}</b></div><div class="glass kpi"><small>TAUX D'ÉPARGNE · FRANCE 2025</small><b>${pct(E/R,1)} · ${String(FRANCE_TAUX).replace('.',',')} %</b></div><div class="glass kpi"><small>PATRIMOINE CUMULÉ</small><b style="font-size:20px">${eur(pat)} → ${eur(pat+E)}</b></div>`;
+  chips=['Propension moyenne à consommer',"Taux d'épargne",'Déterminants : revenu, âge, cycle de vie','Propension marginale à consommer','Épargne de précaution','Épargne = flux · patrimoine = stock',"Pouvoir d'achat (aperçu)",'Coefficient budgétaire (aperçu)']}
+ else if(m==='s2'){const infs=TE.moves.filter(x=>x.month===22).map(x=>x.conso.inf);title='Chacun <span class="grad">son inflation</span>';
+  kp=`<div class="glass kpi"><small>« IPC » DE LA CLASSE</small><b>${sgn(mean(infs))} %</b></div><div class="glass kpi"><small>ÉCART MIN → MAX</small><b>${infs.length?sgn(Math.min(...infs))+' → '+sgn(Math.max(...infs)):'—'} %</b></div><div class="glass kpi"><small>POUVOIR D'ACHAT EN BAISSE (+3 %)</small><b>${infs.filter(v=>REV_UP-v<-.05).length} élèves</b></div>`;
+  chips=['Panier de biens et services','Indice des prix à la consommation (IPC)','Inflation','Inflation ressentie','Pouvoir d\'achat','Revenu nominal / réel',"Évolution du pouvoir d'achat"]}
+ else{const ps=TE.moves.filter(x=>x.month===31),err=mean(ps.map(x=>mean(P3.map(([c,,,,r])=>Math.abs(x.conso.p[c]-r))))),vs=TE.moves.filter(x=>x.month===32),vok=mean(vs.map(v=>VV.filter((x,i)=>v.conso.v[i]===x[2]).length/4));title='Le budget <span class="grad">a voyagé dans le temps</span>';
+  kp=`<div class="glass kpi"><small>ÉCART MOYEN DES PRÉDICTIONS</small><b>${dec(err,1)} pt</b></div><div class="glass kpi"><small>VALEUR / VOLUME RÉUSSIS</small><b>${pct(vok)}</b></div>`;
+  chips=['Structure de consommation','Coefficient budgétaire',"Loi d'Engel",'Valeur / volume','Prix relatif','Progression des services']}
+ W().innerHTML=tHeader()+`<div class="fade" style="display:grid;gap:18px"><div style="text-align:center"><div class="sub mono">BILAN · SOUS-THÈME ${SEANCES[m].code}</div><h1 class="big">${title}</h1></div>
+  <div class="kpis">${kp}<div class="glass kpi"><small>DÉFI ÉCLAIR</small><b>${pct(quizOk)}</b></div></div>
+  <div class="glass pad"><div class="sect" style="margin-top:0">Notions découvertes en jouant</div><div class="players">${chips.map(t=>`<span class="chipp done">✓ ${t}</span>`).join('')}</div></div>
+  <div class="sub" style="text-align:center">Chaque élève découvre son bilan personnel sur son iPad.</div><div class="row" style="justify-content:center"><button class="btn ghost" id="again">Nouvelle séance</button></div></div>`;
+ $('#again').onclick=()=>{clearInterval(TE.timer);store.del('mos_teacher');teacherStart()}}
+
+/* ================= DÉMARRAGE ================= */
+if(qs.get('prof')!==null)teacherStart();
+else if(qs.get('r'))studentJoin(qs.get('r').toUpperCase());
+else if(store.get('mos_student'))studentJoin();
+else landing();
+
+</script>
+</body></html>
